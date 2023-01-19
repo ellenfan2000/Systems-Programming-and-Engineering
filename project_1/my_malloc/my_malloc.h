@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-struct meta_data {
+typedef struct meta_data {
   size_t size;
   char alloc;
-};
+} meta_d;
 
 //First Fit malloc/free
 void * ff_malloc(size_t size);
