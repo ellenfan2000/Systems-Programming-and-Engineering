@@ -23,6 +23,28 @@ void heap_start() {
   }
 }
 
+unsigned long get_data_segment_size(){
+  // heap_start();
+  void * end = sbrk(0);
+  unsigned long ans = (char *) end -  (char *) start;
+  return ans;
+}
+
+unsigned long get_data_segment_free_space_size(){
+  heap_start();
+  meta_d * heap_end = sbrk(0);
+
+  meta_d * rg_header = start;
+  size_t free_space = 0;
+  while (rg_header < heap_end) {
+    if (rg_header->alloc == '0') {
+      free_space += rg_header->size+2*OVERHEAD;
+    }
+    rg_header = (meta_d *)((char *)rg_header + rg_header->size + 2 * OVERHEAD);
+  }
+  return free_space;
+}
+
 void update_free_region(meta_d * header, size_t size) {
   meta_d * tail = (meta_d *)((char *)header + header->size + OVERHEAD);
   if (header->size > size + 2 * OVERHEAD) {
@@ -61,7 +83,7 @@ void * ff_malloc(size_t size) {
     }
     rg_header = (meta_d *)((char *)rg_header + rg_header->size + 2 * OVERHEAD);
   }
-  sbrk(rg_size);
+  rg_header = sbrk(rg_size);
   rg_header->size = size;
   rg_header->alloc = '1';
   meta_d * rg_tail = (meta_d *)((char *)rg_header + rg_header->size + OVERHEAD);
@@ -101,18 +123,39 @@ void ff_free(void * ptr) {
   merge_free_region(rg_header);
 }
 
+void * bf_malloc(size_t size){
+
+
+}
+void bf_free(void * ptr){
+  ff_free(ptr);
+}
+
 int main(void) {
+  heap_start();
+
   void * a = ff_malloc(16);
+  size_t size = 16;
+
+  size_t heap_usage = get_data_segment_size();
+  size_t free_heap  =get_data_segment_free_space_size();
+  
   void * b = ff_malloc(32);
+  heap_usage = get_data_segment_size();
+  free_heap  =get_data_segment_free_space_size();
+
   void * c = ff_malloc(64);
-  printf("Head of the heap is: %p \n", start);
-  printf("Address of a is: %p, size is %d \n", a, 16);
-  printf("Address of b is: %p, size is %d \n", b, 16);
-  printf("Address of c is: %p, size is %d \n", c, 64);
+  heap_usage = get_data_segment_size();
+  free_heap  =get_data_segment_free_space_size();
+
   ff_free(b);
   ff_free(c);
+  heap_usage = get_data_segment_size();
+  free_heap  =get_data_segment_free_space_size();
+
+ 
   void * d = ff_malloc(16);
   void * e = ff_malloc(32);
-  printf("Address of d is: %p, size is %d \n", d, 16);
-  printf("Address of e is: %p, size is %d \n", e, 32);
+  heap_usage = get_data_segment_size();
+  free_heap  =get_data_segment_free_space_size();
 }

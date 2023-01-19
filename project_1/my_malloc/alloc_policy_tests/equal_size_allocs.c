@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   unsigned long data_segment_free_space;
   struct timespec start_time, end_time;
 
-  if (NUM_ITEMS < 10000) {
+  if (NUM_ITEMS < 1000) {
     printf("Error: NUM_ITEMS must be >= 1000\n");
     return -1;
   } //if
