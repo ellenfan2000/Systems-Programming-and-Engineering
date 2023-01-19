@@ -73,9 +73,10 @@ void * ff_malloc(size_t size) {
 
 void merge_free_region(meta_d * header) {
   meta_d * tail = (meta_d *)((char *)header + header->size + OVERHEAD);
+
   meta_d * prev_tail = header - 1;
   size_t size = header->size;
-  while (prev_tail->alloc == '0') {
+  while ((void *)prev_tail> start && prev_tail->alloc == '0') {
     header = (meta_d *)((char *)prev_tail - prev_tail->size - OVERHEAD);
     size = size + 2 * OVERHEAD + prev_tail->size;
     header->size = size;
@@ -83,7 +84,7 @@ void merge_free_region(meta_d * header) {
     prev_tail = header - 1;
   }
   meta_d * next_header = tail + 1;
-  while (next_header->alloc == '0') {
+  while ((void *)next_header < sbrk(0) && next_header->alloc == '0') {
     tail = (meta_d *)((char *)next_header + next_header->size + OVERHEAD);
     size = size + 2 * OVERHEAD + next_header->size;
     header->size = size;
@@ -102,13 +103,16 @@ void ff_free(void * ptr) {
 
 int main(void) {
   void * a = ff_malloc(16);
-  void * b = ff_malloc(16);
+  void * b = ff_malloc(32);
   void * c = ff_malloc(64);
   printf("Head of the heap is: %p \n", start);
   printf("Address of a is: %p, size is %d \n", a, 16);
   printf("Address of b is: %p, size is %d \n", b, 16);
   printf("Address of c is: %p, size is %d \n", c, 64);
   ff_free(b);
-  void * d = ff_malloc(10);
-  printf("Address of d is: %p, size is %d \n", d, 10);
+  ff_free(c);
+  void * d = ff_malloc(16);
+  void * e = ff_malloc(32);
+  printf("Address of d is: %p, size is %d \n", d, 16);
+  printf("Address of e is: %p, size is %d \n", e, 32);
 }
