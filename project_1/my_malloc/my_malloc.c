@@ -174,6 +174,9 @@ void merge_free_region(meta_d * header) {
 }
 
 void ff_free(void * ptr) {
+  if(ptr == NULL){
+    return;
+  }
   meta_d * blk_header = (meta_d *)((char *)ptr - METASIZE);
   meta_d * blk_tail = (meta_d *)((char *)ptr + blk_header->size);
   blk_header->alloc = '0';
