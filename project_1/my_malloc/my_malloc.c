@@ -84,6 +84,9 @@ void * ff_malloc(size_t size) {
     rg_header = (meta_d *)((char *)rg_header + rg_header->size + 2 * OVERHEAD);
   }
   rg_header = sbrk(rg_size);
+  if(rg_header == (meta_d *) -1 ){
+    return NULL;
+  }
   rg_header->size = size;
   rg_header->alloc = '1';
   meta_d * rg_tail = (meta_d *)((char *)rg_header + rg_header->size + OVERHEAD);
@@ -116,12 +119,14 @@ void merge_free_region(meta_d * header) {
 }
 
 void ff_free(void * ptr) {
+  if(ptr != NULL){
   meta_d * rg_header = (meta_d *)((char *)ptr - OVERHEAD);
   meta_d * rg_tail = (meta_d *)((char *)ptr + rg_header->size);
   rg_header->alloc = '0';
   rg_tail->alloc = '0';
   merge_free_region(rg_header);
-}
+   }
+   }
 
 // void * bf_malloc(size_t size){
 
