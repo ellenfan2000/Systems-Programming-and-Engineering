@@ -123,10 +123,10 @@ void ff_free(void * ptr) {
   merge_free_region(rg_header);
 }
 
-void * bf_malloc(size_t size){
+// void * bf_malloc(size_t size){
 
 
-}
+// }
 void bf_free(void * ptr){
   ff_free(ptr);
 }
