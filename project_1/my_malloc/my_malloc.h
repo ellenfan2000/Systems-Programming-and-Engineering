@@ -6,8 +6,8 @@ typedef struct _meta_data {
 } meta_d;
 
 typedef struct _free_block_ptr{
-  meta_d * prev;
-  meta_d * next;
+  struct _free_block_ptr * prev;
+  struct _free_block_ptr * next;
   /* data */
 } free_ptr;
 
