@@ -77,9 +77,6 @@ int main(int argc, char * argv[]) {
   for (i = 0; i < NUM_ITERS; i++) {
     unsigned malloc_set = i % 2;
     for (j = 0; j < NUM_ITEMS; j += 50) {
-      if(i>=1){
-      printf("%d, %d \n", i,j);
-      }
       for (k = 0; k < 50; k++) {
         unsigned item_to_free = free_list[j + k];
         FREE(malloc_items[malloc_set][item_to_free].address);
