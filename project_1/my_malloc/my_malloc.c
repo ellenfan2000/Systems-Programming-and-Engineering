@@ -3,316 +3,416 @@
 #include<assert.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <time.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 // #include "my_malloc.h"
-//#define ALIGN (sizeof(size_t))
-#define METASIZE (sizeof(meta_d))
-#define FPTRSIZE (sizeof(free_ptr))
 
-void * start = NULL;
-meta_d * free_first = NULL;
-
-/* size_t size_align(size_t size) { */
-/*   if (size % ALIGN == 0) { */
-/*     return size; */
-/*   } */
-/*   else { */
-/*     return (size / ALIGN + 1) * ALIGN; */
-/*   } */
-/* } */
-
-meta_d * get_prev_header(meta_d * header){
-  return (meta_d *)((char *)header-(header- 1)->size- 2*METASIZE);
-}
-
-meta_d * get_next_header(meta_d * header){
-  return (meta_d *)((char *)header+header->size+ 2*METASIZE);
-}
-
-free_ptr * get_ptr(meta_d * header){
-  return (free_ptr *)((char *)header + METASIZE);
-}
-
-meta_d * get_tail(meta_d * header){
-  return (meta_d *)((char *)header + header->size + METASIZE);;
-}
+#define METASIZE (sizeof(meta_t))
+meta_t * start = NULL;
 
 void heap_start() {
   if (start == NULL) {
-    // start = sbrk(0);
-
-    free_first = sbrk(FPTRSIZE + 2*METASIZE);
-    free_first->alloc = '0';
-    free_first->size = 16;
-
-    free_ptr * ptr = get_ptr(free_first);
-    ptr->next = NULL;
-    ptr->prev = NULL;
-
-    meta_d * tail = get_tail(free_first);
-    tail->alloc = '0';
-    tail->size = 16;
-    start = sbrk(0);
+    start = sbrk(METASIZE);
+    start->size = 0;
+    start->alloc = '0';
+    start->next = NULL;
+    start->prev = NULL;
   }
 }
 
+int newly_sbrk = -1;
+
+meta_t * find_free_block(meta_t * blk,size_t size){
+    meta_t * prev = blk->prev;
+    while(blk!= NULL){
+        if (blk->size >= size){
+            assert(blk->alloc == '0');
+            newly_sbrk = -1;
+            return blk;
+        }
+        prev = blk;
+        blk = blk->next;
+    }
+    size_t blk_size = size + METASIZE;
+    blk = sbrk(blk_size);
+    newly_sbrk = 1;
+    if(blk == (meta_t *)-1){
+        return NULL;
+    }
+    blk->next = NULL;
+    blk->prev = prev;
+    blk->size = size;
+    blk->alloc = '0';
+    // update_alloced_ptr(blk);
+    return blk;
+}
+
+meta_t * get_next_blk(meta_t * blk){
+    return (meta_t *)((char *)blk + METASIZE + blk->size);
+}
+
+void update_alloced_ptr(meta_t * blk){
+    meta_t * curr;
+    if (blk->prev == NULL){
+        curr = start;
+    }else{
+        curr = blk->prev;
+    }
+    // meta_t * curr = blk->prev;
+    assert(curr->alloc = '0'); 
+    while(curr<blk){
+        curr->next = blk;
+        curr = get_next_blk(curr);
+    }
+    assert(curr == blk);
+    curr = get_next_blk(curr);
+
+    if(blk->next ==NULL){  
+        while((void *)curr<sbrk(0)){
+            curr->prev = blk;
+            curr= get_next_blk(curr);
+        }
+    }else{
+        while(curr<blk->next){
+            curr->prev = blk;
+            curr= get_next_blk(curr);
+        }
+    }
+}
+
+void remove_free_block(meta_t * blk){
+    blk->prev->next = blk->next;
+    if(blk->next != NULL){
+        blk->next->prev = blk->prev;
+        update_alloced_ptr(blk->next);
+    }
+    update_alloced_ptr(blk->prev);
+    // update_alloced_ptr(blk->prev);
+}
+
+int split_free_block(meta_t * blk,size_t size){
+    // return (char *)free_blk + METASIZE;
+    if(blk->size >= size + METASIZE){
+        //change free blocks' pointers
+        meta_t * new_free_blk = (meta_t *)((char *)blk + size + METASIZE);
+        new_free_blk->alloc = '0';
+        new_free_blk->size = blk->size - size - METASIZE;
+        new_free_blk->next = blk->next;
+        new_free_blk->prev = blk->prev;
+
+        blk->prev->next = new_free_blk;
+        if(blk->next != NULL){
+            blk->next->prev = new_free_blk;
+        }
+        blk->size = size;
+        //change allocated blocks' pointer 
+        update_alloced_ptr(new_free_blk);
+        return 1;
+    }
+    remove_free_block(blk);
+    // update_alloced_ptr(blk->prev);
+    return -1;
+}
+
+void * ff_malloc(size_t size){
+    heap_start();
+    meta_t * free_blk = find_free_block(start, size);
+    free_blk->alloc = '1';
+    if(newly_sbrk = -1){
+        int split = split_free_block(free_blk,size);
+    }// if(newly_sbrk = -1 && split == -1){
+    //     remove_free_block(free_blk);
+    // }
+    return (char *)free_blk + METASIZE;
+
+}
+
+void * merge_free_blk(meta_t * blk){
+    //start with the left one
+    assert(blk->alloc == '0');
+    //merge with the one after
+    if(get_next_blk(blk) == blk->next && blk->next != NULL){
+        blk->size += blk->next->size + METASIZE;
+        blk->next = blk->next->next;
+        if(blk->next!=NULL){
+            blk->next->prev = blk;
+        }
+    }
+    //merge with the one before;
+    if(get_next_blk(blk->prev) == blk && blk->prev != start){
+        blk->prev->size += blk->size + METASIZE;
+        blk->prev->next = blk->next;
+        if(blk->next!=NULL){
+            blk->next->prev = blk->prev;
+        }
+        blk = blk->prev;
+    }
+    update_alloced_ptr(blk);
+}
+
+void ff_free(void * ptr){
+    meta_t * blk = (meta_t *)((char *)ptr-METASIZE);
+    if(blk->alloc!='1' || ptr == NULL){
+        perror("invalid free \n");
+    }
+    blk->alloc = '0';
+    blk->prev->next = blk;
+    if(blk->next!=NULL){
+        blk->next->prev = blk;
+    }
+    update_alloced_ptr(blk);
+
+    merge_free_blk(blk);
+
+    // if(blk->next != NULL){
+    //     merge_free_blk(blk->next);
+    // }
+    // merge_free_blk(blk);
+    // else{
+    //     merge_free_blk(blk);
+    // }
+    
+}
+
+//Best Fit malloc/free
+void * bf_malloc(size_t size){
+    ff_malloc(size);
+
+}
+void bf_free(void * ptr){
+    ff_free(ptr);
+}
+
 unsigned long get_data_segment_size(){
-  // heap_start();
+    // heap_start();
   void * end = sbrk(0);
   unsigned long ans = (char *) end -  (char *) start;
   return ans;
 }
-
 unsigned long get_data_segment_free_space_size(){
-  
-  size_t free_space = 0;
-  free_ptr * ptr = get_ptr(free_first);
-  meta_d * header = free_first;
-  while(ptr != NULL){
-    header = (meta_d *)((char *)ptr - METASIZE);
-    free_space += header->size;
-    ptr = ptr->next;
-  }
-  
+    size_t free_space = 0;
+    meta_t * ptr = start;
+    while(ptr != NULL){
+        free_space += ptr->size;
+        ptr = ptr->next;
+    }
   return free_space;
 }
 
-void remove_free_block(free_ptr * ptr){
-  free_ptr * prev = ptr->prev;
-  free_ptr * next = ptr->next;
-  prev->next = next;
-  if (next != NULL){
-    next->prev = prev;
-  }
-  ptr = NULL;
+#define NUM_ITERS    100
+#define NUM_ITEMS    10000
+
+// #ifdef FF
+#define MALLOC(sz) ff_malloc(sz)
+#define FREE(p)    ff_free(p)
+// #endif
+// #ifdef BF
+// #define MALLOC(sz) bf_malloc(sz)
+// #define FREE(p)    bf_free(p)
+// #endif
+
+char dumb_hash(void* p) {
+    unsigned char h = (unsigned char) (17*(uintptr_t)p*(uintptr_t)p + 7*(uintptr_t)p + 3*((uintptr_t)p>>8)); // dumb garbage fake hash
+    return h;
 }
 
-//this function is to split big free block when 
-//allocating space and update free blocks meta data
-void use_free_block(meta_d * header, size_t size) {
-  // origin free block tail
-  meta_d * tail = get_tail(header);
-  free_ptr * ptr = get_ptr(header);
+void* MALLOC_WITH_CHECK(size_t sz) {
+    void* p = MALLOC(sz);
+    unsigned char h = dumb_hash(p);
+    memset(p,h,sz);
+    return p;
+}
 
-  //if need to split the block
-  if (header->size > size + 2 * METASIZE+FPTRSIZE) {
-
-    meta_d * alloc_tail = (meta_d *)((char *)header + size + METASIZE);
-    alloc_tail->size = size;
-    alloc_tail->alloc = '1';
-
-    meta_d * new_header = (meta_d *)((char *)alloc_tail + METASIZE);
-    new_header->size = header->size - size - 2 * METASIZE;
-    new_header->alloc = '0';
-
-    tail->size = header->size - size - 2 * METASIZE;
-    tail->alloc = '0';
-
-    header->size = size;
-    header->alloc = '1';
-
-    free_ptr * new_ptr = get_ptr(new_header);
-
-    new_ptr->next = ptr->next;
-    new_ptr->prev = ptr;
-
-    if(ptr->next != NULL){
-      ptr->next->prev = new_ptr;
+bool FREE_WITH_CHECK(void* p, size_t sz) {
+    bool r = true;
+    unsigned char h = dumb_hash(p);
+    int i;
+    unsigned char* cp = p;
+    for (i=0; i<sz; i++, cp++) {
+        if (*cp != h) {
+            r = false;
+            printf("p=%p cp=%p *cp=%x h=%x\n",p,cp,*cp,h);
+            break;
+        }
     }
-    ptr->next = new_ptr;
-  }
-  else {
-    header->alloc = '1';
-    tail->alloc = '1';
-  }
-  remove_free_block(ptr);
+    FREE(p);
+    return r;
 }
 
-meta_d * find_free_block(free_ptr * ptr, size_t size){
-  // free_ptr * ptr= get_ptr(header);
-  meta_d * blk_header;
-  while (ptr!= NULL){
-    blk_header = (meta_d *)((char *)ptr - METASIZE);
-    if (blk_header->size >= size){
-      return blk_header;
+double calc_time(struct timespec start, struct timespec end) {
+  double start_sec = (double)start.tv_sec*1000000000.0 + (double)start.tv_nsec;
+  double end_sec = (double)end.tv_sec*1000000000.0 + (double)end.tv_nsec;
+
+  if (end_sec < start_sec) {
+    return 0;
+  } else {
+    return end_sec - start_sec;
+  }
+};
+
+
+struct malloc_list {
+  size_t bytes;
+  int *address;
+};
+typedef struct malloc_list malloc_list_t;
+
+malloc_list_t malloc_items[2][NUM_ITEMS];
+
+unsigned free_list[NUM_ITEMS];
+
+
+int main(int argc, char *argv[])
+{
+  int i, j, k;
+  unsigned tmp;
+  unsigned long data_segment_size;
+  unsigned long data_segment_free_space;
+  struct timespec start_time, end_time;
+  
+  int num_iters = NUM_ITERS;
+  if (argc>=2) {
+      num_iters = atoi(argv[1]);
+      if (num_iters==0) {
+        //   printf("Syntax: %s [num_iters_override]\n",argv[0]);
+          return 1;
+      }
+      num_iters &= -2; // make it a multiple of 2
+  }
+
+  srand(0);
+
+  const unsigned chunk_size = 32;
+  const unsigned min_chunks = 4;
+  const unsigned max_chunks = 16;
+  for (i=0; i < NUM_ITEMS; i++) {
+    malloc_items[0][i].bytes = ((rand() % (max_chunks - min_chunks + 1)) + min_chunks) * chunk_size;
+    malloc_items[1][i].bytes = ((rand() % (max_chunks - min_chunks + 1)) + min_chunks) * chunk_size;
+    free_list[i] = i;
+  } //for i
+
+  i = NUM_ITEMS;
+  while (i > 1) {
+    i--;
+    j = rand() % i;
+    tmp = free_list[i];
+    free_list[i] = free_list[j];
+    free_list[j] = tmp;
+  } //while
+
+
+  for (i=0; i < NUM_ITEMS; i++) {
+    malloc_items[0][i].address = (int *)MALLOC_WITH_CHECK(malloc_items[0][i].bytes);
+  } //for i
+
+  bool r = false;
+
+  //Start Time
+//   clock_gettime(CLOCK_MONOTONIC, &start_time);
+  
+  for (i=0; i < num_iters; i++) {
+    unsigned malloc_set = i % 2;
+    // printf("\rIteration %5d / %5d (%.1f%%)", i, num_iters, (float)i/num_iters*100); fflush(stdout);
+    for (j=0; j < NUM_ITEMS; j+=50) {
+      for (k=0; k < 50; k++) {
+        unsigned item_to_free = free_list[j+k];
+        r = FREE_WITH_CHECK(malloc_items[malloc_set][item_to_free].address, malloc_items[malloc_set][item_to_free].bytes);
+        if (!r) {
+        //   printf("ERROR: Content check failed while freeing %p\n", malloc_items[malloc_set][item_to_free].address);
+        }
+      } //for k
+      for (k=0; k < 50; k++) {
+        malloc_items[1-malloc_set][j+k].address = (int *)MALLOC_WITH_CHECK(malloc_items[1-malloc_set][j+k].bytes);
+      } //for k
+    } //for j
+  } //for i
+  printf("\n\n");
+
+  //Stop Time
+//   clock_gettime(CLOCK_MONOTONIC, &end_time);
+
+  data_segment_size = get_data_segment_size();
+  data_segment_free_space = get_data_segment_free_space_size();
+  printf("data_segment_size = %lu, data_segment_free_space = %lu\n", data_segment_size, data_segment_free_space);
+
+//   double elapsed_ns = calc_time(start_time, end_time);
+//   printf("Execution Time = %f seconds\n", elapsed_ns / 1e9);
+  printf("Fragmentation  = %f\n", (float)data_segment_free_space/(float)data_segment_size);
+
+  for (i=0; i < NUM_ITEMS; i++) {
+    r = FREE_WITH_CHECK(malloc_items[0][i].address, malloc_items[0][i].bytes);
+    if (!r) {
+      printf("ERROR: Content check failed while freeing %p\n", malloc_items[0][i].address);
     }
-    ptr = ptr->next;
-  }
-  return NULL;
+  } //for i
+
+  return 0;
 }
 
-void * ff_malloc(size_t size) {
-  heap_start();
-  // meta_d * heap_end = sbrk(0);
-  //ensure enough space when freeing (space for free_pointer)
-  if (size < FPTRSIZE){
-    size = FPTRSIZE;
-  }
-  size_t blk_size = size + 2 * METASIZE;
-
-  // find free block 
-  meta_d * blk_header = find_free_block(get_ptr(free_first)->next,size);
-  if(blk_header != NULL){
-    use_free_block(blk_header, size);
-    return (char *)blk_header + METASIZE;
-  }
-  else{ //if no free block is available, increase the heap size. 
-    blk_header = sbrk(blk_size);
-    if(blk_header == (meta_d *)-1){
-      return NULL;
-    }
-    blk_header->size = size;
-    blk_header->alloc = '1';
-    meta_d * blk_tail = get_tail(blk_header);
-    blk_tail->size = size;
-    blk_tail->alloc = '1';
-    return (char *)blk_header + METASIZE;
-  }
-}
-
-void merge_backward(meta_d * header) {
-
-  free_ptr * ptr = get_ptr(header);
-  meta_d * next_header = get_next_header(header);
-  free_ptr * next_ptr = get_ptr(next_header);
-
-  while((void *)next_header < sbrk(0) && ptr->next == next_ptr){
-    header->size += next_header->size+2*METASIZE;
-    get_tail(next_header)->size = header->size;
-    ptr->next = next_ptr->next;
-    
-    if(next_ptr->next!=NULL){
-    next_ptr->next->prev = ptr;
-    }
-    next_ptr = next_ptr->next;
-    next_header = get_next_header(next_header);
-    next_ptr = get_ptr(next_header);
-  }
-}
-
-void merge_forward(meta_d * header) {
-  free_ptr * ptr = get_ptr(header);
-  meta_d * prev_header = get_prev_header(header);
-
-  free_ptr * prev_ptr = get_ptr(prev_header);
-  while ((void *)prev_header>=start && prev_ptr->next == ptr) {
-    prev_header->size += header->size +2*METASIZE;
-    get_tail(header)->size = prev_header->size;
-
-    assert(get_ptr(prev_header)->next == ptr);
-    prev_ptr->next = ptr->next;
-    if(ptr->next != NULL){
-      ptr->next->prev = prev_ptr;
-    }
-
-    ptr = NULL;
-    header = prev_header;
-    prev_header = get_prev_header(header);
-    ptr = prev_ptr;
-    prev_ptr = get_ptr(prev_header);
-  }
-
-}
-
-meta_d * find_prev_free(meta_d * header){
-  // printf("%p \n ", (void*)header); 
-  assert((void *)header >=start);
-  header = get_prev_header(header);
-  // meta_d * prev_free_header = get_prev_header(header);
-  while (header > free_first && header->alloc == '1') {
-    // printf("location: %p \n",prev_free_header);
-    header = get_prev_header(header);
-  }
-  return header;
-}
-
-void ff_free(void * ptr) {
-  // printf("%p \n ", ptr); 
-  if(ptr == NULL){
-    return;
-  }
-  //update meta_d information to free block
-  meta_d * blk_header = (meta_d *)((char *)ptr - METASIZE);
-  meta_d * blk_tail = get_tail(blk_header);
-  blk_header->alloc = '0';
-  blk_tail->alloc = '0';
-
-  //new free_block's pointer
-  free_ptr * blk_free_ptr = get_ptr(blk_header);
-
-  //the nearest free block before current block
-  meta_d * prev_free_header = find_prev_free(blk_header);
-  assert(prev_free_header >= free_first);
-  free_ptr * prev_free_ptr = get_ptr(prev_free_header);
-
-  blk_free_ptr->next = prev_free_ptr->next;
-  if(prev_free_ptr->next!= NULL){
-    prev_free_ptr->next->prev = blk_free_ptr;
-  }
-  prev_free_ptr->next = blk_free_ptr;
-  blk_free_ptr->prev = prev_free_ptr;
-
-  merge_backward(blk_header);
-
-  if(get_next_header(prev_free_header)==blk_header){
-    merge_forward(blk_header);
-  }
-
-  // if(prev_free_header == free_first){
-  //   merge_free_block(blk_header);
-  // }else{
-  //   merge_free_block(prev_free_header);
-  //   merge_free_block(blk_header);
-  // }
-}
-
-
-void * bf_malloc(size_t size){
-  return ff_malloc(size);
-
-}
-void bf_free(void * ptr){
-  ff_free(ptr);
-}
 
 // int main(void) {
 //   heap_start();
-//   free_ptr * free = get_ptr(free_first);
-//   meta_d * a = (char*)ff_malloc(16)-METASIZE;
-//   meta_d* b = (char*)ff_malloc(32)-METASIZE;
-//   meta_d * c = (char*)ff_malloc(48)-METASIZE;
-//   meta_d * d = (char*)ff_malloc(64)-METASIZE;
-//   meta_d * e = (char*)ff_malloc(80)-METASIZE;
-//   meta_d* f = (char*)ff_malloc(16)-METASIZE;
-//   meta_d * g = (char*)ff_malloc(32)-METASIZE;
-//   meta_d * h = (char*)ff_malloc(48)-METASIZE;
-//   meta_d * i = (char*)ff_malloc(64)-METASIZE;
-//   meta_d * j = (char*)ff_malloc(80)-METASIZE;
+//   meta_t * a = (char*)ff_malloc(16)-METASIZE;
+//     meta_t* b = (char*)ff_malloc(32)-METASIZE;
+//     meta_t * c = (char*)ff_malloc(48)-METASIZE;
+//   meta_t * d = (char*)ff_malloc(64)-METASIZE;
+//   meta_t * e = (char*)ff_malloc(80)-METASIZE;
+//   meta_t* f = (char*)ff_malloc(16)-METASIZE;
+//   meta_t * g = (char*)ff_malloc(32)-METASIZE;
+//   meta_t * h = (char*)ff_malloc(48)-METASIZE;
+//   meta_t * i = (char*)ff_malloc(64)-METASIZE;
+//   meta_t * j = (char*)ff_malloc(80)-METASIZE;
 
-//   // ff_free(d);
-//   // ff_free(b);
-//   // ff_free(c);
-//   // ff_free(e+1);
-//   // ff_malloc(80);
-//   // ff_free(j+1);
-//   // ff_malloc(80);
-//   // ff_free(i+1);
-//   // ff_malloc(64);
-//   ff_free(h+1);  
-//   ff_free(b+1);
-//   ff_free(a+1);//first block cannot be changed
-//   ff_free(f+1);
-//   ff_free(c+1);
-//   // ff_free(g+1);
+// //   void * a = ff_malloc(16);
+// //     void* b = ff_malloc(32);
+// //     void * c = ff_malloc(48);
+// //  void * d = ff_malloc(64);
+// //   void * e = ff_malloc(80);
+// //   void* f = ff_malloc(16);
+// //   void * g = ff_malloc(32);
+// //   void * h = ff_malloc(48);
+// //   void * i = ff_malloc(64);
+// //   void * j = ff_malloc(80);
+
+//    ff_free((void *)((char*)h+METASIZE)); 
+// //    ff_free((char*)i+METASIZE);
+//    ff_free((char*)j+METASIZE);
+//    ff_free((char*)i+METASIZE);
+
+//     ff_free((char*)f+METASIZE);
+//   ff_free((char*)e+METASIZE);
+// //   ff_free((char*)d+METASIZE);
+// //   ff_free((char*)g+METASIZE);
 //   // ff_free(d+1);
+//   ff_free((char*)b+METASIZE);
+//   ff_free((char*)c+METASIZE);
+  
+//   // ff_malloc(80);
+  
+//   // ff_malloc(80);
+  
+//   // ff_malloc(64);
+  
+//   // ff_free(b+1);
+//   // ff_free(a+1);//first block cannot be changed
+ 
+//   // ff_free(c+1);
+  
+  
 
 
 //   void * k = ff_malloc(10);
 //   void * l = ff_malloc(20);
 //   void * m = ff_malloc(80);
 
+//     ff_free(k);
+//     ff_free(l);
+//     ff_free(m);
+//     ff_free((char*)d+METASIZE);
+//     ff_free((char*)g+METASIZE);
+//     ff_free((char*)a+METASIZE);
 
 //   size_t heap_usage = get_data_segment_size();
 //   printf("heap start: %p \n", start);
@@ -324,134 +424,30 @@ void bf_free(void * ptr){
 //   printf("f location: %p \n", f);
 //   printf("heap usage: %lu \n", heap_usage);
 //   printf("fptr size: %lu \n", METASIZE);
-//   printf("fptr size: %lu \n", FPTRSIZE);
-//   // void * a = ff_malloc(16);
-//   // size_t size = 16;
+// //   void * a = ff_malloc(16);
+// //   size_t size = 16;
 
-//   // size_t heap_usage = get_data_segment_size();
-//   // size_t free_heap  =get_data_segment_free_space_size();
+// //   size_t heap_usage = get_data_segment_size();
+// //   size_t free_heap  =get_data_segment_free_space_size();
   
-//   // void * b = ff_malloc(32);
-//   // heap_usage = get_data_segment_size();
-//   // free_heap  =get_data_segment_free_space_size();
+// //   void * b = ff_malloc(32);
+// //   heap_usage = get_data_segment_size();
+// //   free_heap  =get_data_segment_free_space_size();
 
-//   // void * c = ff_malloc(64);
-//   // heap_usage = get_data_segment_size();
-//   // free_heap  =get_data_segment_free_space_size();
+// //   void * c = ff_malloc(64);
+// //   heap_usage = get_data_segment_size();
+// //   free_heap  =get_data_segment_free_space_size();
 
-//   // ff_free(b);
-//   // ff_free(c);
-//   // heap_usage = get_data_segment_size();
-//   // free_heap  =get_data_segment_free_space_size();
+// //   ff_free(b);
+// //   ff_free(c);
+// //   heap_usage = get_data_segment_size();
+// //   free_heap  =get_data_segment_free_space_size();
 
  
-//   // void * d = ff_malloc(16);
-//   // void * e = ff_malloc(32);
-//   // heap_usage = get_data_segment_size();
-//   // free_heap  =get_data_segment_free_space_size();
-// }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// //   void * d = ff_malloc(16);
+// //   void * e = ff_malloc(32);
+// //   heap_usage = get_data_segment_size();
+// //   free_heap  =get_data_segment_free_space_size();
 
-// #define NUM_ITERS    100
-// #define NUM_ITEMS    10000
-
-// // #ifdef FF
-// #define MALLOC(sz) ff_malloc(sz)
-// #define FREE(p)    ff_free(p)
-// // #endif
-// // #ifdef BF
-// // #define MALLOC(sz) bf_malloc(sz)
-// // #define FREE(p)    bf_free(p)
-// // #endif
-
-
-// double calc_time(struct timespec start, struct timespec end) {
-//   double start_sec = (double)start.tv_sec*1000000000.0 + (double)start.tv_nsec;
-//   double end_sec = (double)end.tv_sec*1000000000.0 + (double)end.tv_nsec;
-
-//   if (end_sec < start_sec) {
-//     return 0;
-//   } else {
-//     return end_sec - start_sec;
-//   }
-// };
-
-
-// struct malloc_list {
-//   size_t bytes;
-//   int *address;
-// };
-// typedef struct malloc_list malloc_list_t;
-
-// malloc_list_t malloc_items[2][NUM_ITEMS];
-
-// unsigned free_list[NUM_ITEMS];
-
-
-// int main(int argc, char *argv[])
-// {
-//   int i, j, k;
-//   unsigned tmp;
-//   unsigned long data_segment_size;
-//   unsigned long data_segment_free_space;
-//   struct timespec start_time, end_time;
-
-//   srand(0);
-
-//   const unsigned chunk_size = 32;
-//   const unsigned min_chunks = 4;
-//   const unsigned max_chunks = 16;
-//   for (i=0; i < NUM_ITEMS; i++) {
-//     malloc_items[0][i].bytes = ((rand() % (max_chunks - min_chunks + 1)) + min_chunks) * chunk_size;
-//     malloc_items[1][i].bytes = ((rand() % (max_chunks - min_chunks + 1)) + min_chunks) * chunk_size;
-//     free_list[i] = i;
-//   } //for i
-
-//   i = NUM_ITEMS;
-//   while (i > 1) {
-//     i--;
-//     j = rand() % i;
-//     tmp = free_list[i];
-//     free_list[i] = free_list[j];
-//     free_list[j] = tmp;
-//   } //while
-
-
-//   for (i=0; i < NUM_ITEMS; i++) {
-//     malloc_items[0][i].address = (int *)MALLOC(malloc_items[0][i].bytes);
-//   } //for i
-
-
-//   //Start Time
-//   // clock_gettime(CLOCK_MONOTONIC, &start_time);
-
-//   for (i=0; i < NUM_ITERS; i++) {
-//     unsigned malloc_set = i % 2;
-//     for (j=0; j < NUM_ITEMS; j+=50) {
-//       for (k=0; k < 50; k++) {
-//         unsigned item_to_free = free_list[j+k];
-//         FREE(malloc_items[malloc_set][item_to_free].address);
-//       } //for k
-//       for (k=0; k < 50; k++) {
-//       	malloc_items[1-malloc_set][j+k].address = (int *)MALLOC(malloc_items[1-malloc_set][j+k].bytes);
-//       } //for k
-//     } //for j
-//   } //for i
-
-//   //Stop Time
-//   // clock_gettime(CLOCK_MONOTONIC, &end_time);
-
-//   data_segment_size = get_data_segment_size();
-//   data_segment_free_space = get_data_segment_free_space_size();
-//   printf("data_segment_size = %lu, data_segment_free_space = %lu\n", data_segment_size, data_segment_free_space);
-
-//   // double elapsed_ns = calc_time(start_time, end_time);
-//   // printf("Execution Time = %f seconds\n", elapsed_ns / 1e9);
-//   printf("Fragmentation  = %f\n", (float)data_segment_free_space/(float)data_segment_size);
-
-//   for (i=0; i < NUM_ITEMS; i++) {
-//     FREE(malloc_items[0][i].address);
-//   } //for i
-
-//   return 0;
+// //     printf("heap usage: %lu \n", heap_usage);
 // }
