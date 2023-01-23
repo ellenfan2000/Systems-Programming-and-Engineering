@@ -1,24 +1,11 @@
 #include <stdlib.h>
 
-// typedef struct _meta_data {
-//   size_t size;
-//   char alloc;
-// } meta_d;
-
 typedef struct _meta_data_new {
   size_t size;
   struct _meta_data_new * next;
   struct _meta_data_new * prev;
-  
   char alloc;
 } meta_t;
-
-
-typedef struct _free_block_ptr{
-  struct _free_block_ptr * prev;
-  struct _free_block_ptr * next;
-  /* data */
-} free_ptr;
 
 
 //First Fit malloc/free
