@@ -22,7 +22,7 @@ void heap_start() {
   }
 }
 
-int newly_sbrk = -1;
+int newly_sbrk = 0;
 
 meta_t * find_free_block(meta_t * blk,size_t size){
     // meta_t * prev = blk->prev;
@@ -182,31 +182,68 @@ void ff_free(void * ptr){
       blk->prev = curr;
       blk->next = NULL;
     }
-
-
     merge_free_blk(blk);
-
-    // if(blk->next != NULL){
-    //     merge_free_blk(blk->next);
-    // }
-    // merge_free_blk(blk);
-    // else{
-    //     merge_free_blk(blk);
-    // }
     
 }
 
+meta_t * bf_find_free_block(meta_t * blk,size_t size){
+  // meta_t * prev = blk->prev;
+    meta_t * ans;
+    size_t small = 100000000;
+    int flag = 0;
+    while(blk!= NULL){
+        if (blk->size >= size){
+            assert(blk->alloc == '0');
+            if(blk->size < small){
+              small = blk->size;
+              ans = blk;
+            }
+            flag = 1;
+            newly_sbrk = -1;
+        }
+        blk = blk->next;
+    }
+    if(flag == 1){
+      return ans;
+    }
+    else{
+      size_t blk_size = size + METASIZE;
+      blk = sbrk(blk_size);
+      newly_sbrk = 1;
+      if(blk == (meta_t *)-1){
+          return NULL;
+      }
+      blk->next = NULL;
+      blk->prev = NULL;
+      blk->size = size;
+      blk->alloc = '0';
+      return blk;
+    }
+}
+
+
 //Best Fit malloc/free
 void * bf_malloc(size_t size){
-    ff_malloc(size);
+    heap_start();
+    meta_t * free_blk = bf_find_free_block(start, size);
+    free_blk->alloc = '1';
+    if(newly_sbrk == -1){
+        int split = split_free_block(free_blk,size);
+    }// if(newly_sbrk = -1 && split == -1){
+    //     remove_free_block(free_blk);
+    // }
+    return (char *)free_blk + METASIZE;
 
+    
+    return ff_malloc(size);
+  
 }
 void bf_free(void * ptr){
     ff_free(ptr);
 }
 
 unsigned long get_data_segment_size(){
-    // heap_start();
+  heap_start();
   void * end = sbrk(0);
   unsigned long ans = (char *) end -  (char *) start;
   return ans;
@@ -215,7 +252,7 @@ unsigned long get_data_segment_free_space_size(){
     size_t free_space = 0;
     meta_t * ptr = start;
     while(ptr != NULL){
-        free_space += ptr->size;
+        free_space += ptr->size + METASIZE;
         ptr = ptr->next;
     }
   return free_space;

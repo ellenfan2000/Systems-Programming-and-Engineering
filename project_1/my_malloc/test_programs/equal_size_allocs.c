@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     } //for j
 
     for (j=1000; j < NUM_ITEMS; j++) {
-      array[j] = (int *)MALLOC_WITH_CHECK(ALLOC_SIZE);
+      array[j] = (int *)MALLOC(ALLOC_SIZE);
       FREE_WITH_CHECK(array[j-1000],ALLOC_SIZE);
 
       if ((i==num_iters/2) && (j==NUM_ITEMS/2)) {
