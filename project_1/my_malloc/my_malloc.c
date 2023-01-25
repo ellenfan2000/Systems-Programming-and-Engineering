@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include <limits.h>
+
 // #include "my_malloc.h"
 
 #define METASIZE (sizeof(meta_t))
@@ -189,17 +191,21 @@ void ff_free(void * ptr){
 meta_t * bf_find_free_block(meta_t * blk,size_t size){
   // meta_t * prev = blk->prev;
     meta_t * ans;
-    size_t small = 100000000;
+    size_t small = ULONG_MAX;
+    // size = ULONG_MAX;
     int flag = 0;
     while(blk!= NULL){
         if (blk->size >= size){
+            flag = 1;
+            newly_sbrk = -1;
             assert(blk->alloc == '0');
+            if(blk->size == size){
+                return blk;
+            }
             if(blk->size < small){
               small = blk->size;
               ans = blk;
             }
-            flag = 1;
-            newly_sbrk = -1;
         }
         blk = blk->next;
     }
@@ -229,13 +235,9 @@ void * bf_malloc(size_t size){
     free_blk->alloc = '1';
     if(newly_sbrk == -1){
         int split = split_free_block(free_blk,size);
-    }// if(newly_sbrk = -1 && split == -1){
-    //     remove_free_block(free_blk);
-    // }
+    }
     return (char *)free_blk + METASIZE;
-
-    
-    return ff_malloc(size);
+    // return ff_malloc(size);
   
 }
 void bf_free(void * ptr){
@@ -260,16 +262,16 @@ unsigned long get_data_segment_free_space_size(){
 
 // int main(void) {
 //   heap_start();
-//   meta_t * a = (char*)ff_malloc(16)-METASIZE;
-//     meta_t* b = (char*)ff_malloc(32)-METASIZE;
-//     meta_t * c = (char*)ff_malloc(48)-METASIZE;
-//   meta_t * d = (char*)ff_malloc(64)-METASIZE;
-//   meta_t * e = (char*)ff_malloc(80)-METASIZE;
-//   meta_t* f = (char*)ff_malloc(16)-METASIZE;
-//   meta_t * g = (char*)ff_malloc(32)-METASIZE;
-//   meta_t * h = (char*)ff_malloc(48)-METASIZE;
-//   meta_t * i = (char*)ff_malloc(64)-METASIZE;
-//   meta_t * j = (char*)ff_malloc(80)-METASIZE;
+//   meta_t * a = (char*)bf_malloc(16)-METASIZE;
+//     meta_t* b = (char*)bf_malloc(32)-METASIZE;
+//     meta_t * c = (char*)bf_malloc(48)-METASIZE;
+//   meta_t * d = (char*)bf_malloc(64)-METASIZE;
+//   meta_t * e = (char*)bf_malloc(80)-METASIZE;
+//   meta_t* f = (char*)bf_malloc(16)-METASIZE;
+//   meta_t * g = (char*)bf_malloc(32)-METASIZE;
+//   meta_t * h = (char*)bf_malloc(48)-METASIZE;
+//   meta_t * i = (char*)bf_malloc(64)-METASIZE;
+//   meta_t * j = (char*)bf_malloc(80)-METASIZE;
 
 // //   void * a = ff_malloc(16);
 // //     void* b = ff_malloc(32);
@@ -309,9 +311,9 @@ unsigned long get_data_segment_free_space_size(){
   
 
 
-//   void * k = ff_malloc(10);
-//   void * l = ff_malloc(20);
-//   void * m = ff_malloc(80);
+//   void * k = bf_malloc(10);
+//   void * l = bf_malloc(20);
+//   void * m = bf_malloc(80);
 
 //     ff_free(k);
 //     ff_free(l);
