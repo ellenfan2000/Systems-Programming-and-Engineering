@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
   for (i=0; i < NUM_ITEMS; i++) {
     FREE(array[i]);
   } //for i
-  printf("prepare done");
+  // printf("prepare done");
   //Start Time
   clock_gettime(CLOCK_MONOTONIC, &start_time);
 

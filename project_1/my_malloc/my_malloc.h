@@ -1,12 +1,18 @@
 #include <stdlib.h>
 
-typedef struct _meta_data_new {
+typedef struct _meta_data {
   size_t size;
-  struct _meta_data_new * next;
-  struct _meta_data_new * prev;
+  struct _meta_data * next;
+  struct _meta_data * prev;
   char alloc;
 } meta_t;
 
+meta_t * find_free_block(meta_t * blk,size_t size);
+meta_t * get_next_blk(meta_t * blk);
+void remove_free_block(meta_t * blk);
+int split_free_block(meta_t * blk,size_t size);
+void * merge_free_blk(meta_t * blk);
+meta_t * bf_find_free_block(meta_t * blk,size_t size);
 
 //First Fit malloc/free
 void * ff_malloc(size_t size);
