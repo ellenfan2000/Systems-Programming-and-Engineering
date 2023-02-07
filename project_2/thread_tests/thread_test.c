@@ -120,6 +120,7 @@ int main(int argc, char *argv[])
   } //else
 
   for (i=0; i < NUM_THREADS * NUM_ITEMS; i++) {
+    // printf("%d \n",i);
     FREE(malloc_items[i].address);
   } //for i
 
