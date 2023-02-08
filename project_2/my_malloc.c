@@ -110,7 +110,7 @@ void * merge_free_blk(meta_t * blk){
     if there is no one in the existed heap
     increase the heap's size
 */
-meta_t * bf_find_free_block(meta_t * blk,size_t size){
+meta_t * find_free_block(meta_t * blk,size_t size){
   // meta_t * prev = blk->prev;
     meta_t * ans; //store the smallest free block 
     size_t small = ULONG_MAX; //store the smallest free block's size
@@ -154,7 +154,7 @@ meta_t * bf_find_free_block(meta_t * blk,size_t size){
 void * ts_malloc_lock(size_t size){
     pthread_mutex_lock(&lock);
     heap_start();
-    meta_t * free_blk = bf_find_free_block(start, size);
+    meta_t * free_blk = find_free_block(start, size);
     free_blk->alloc = '1';
     if(newly_sbrk == -1){
         int split = split_free_block(free_blk,size);
@@ -164,11 +164,15 @@ void * ts_malloc_lock(size_t size){
 }
 
 void ts_free_lock(void *ptr){
+    pthread_mutex_lock(&lock);
+    if(start == NULL){
+        heap_start();
+    }
     meta_t * blk = (meta_t *)((char *)ptr-METASIZE);
     if(blk->alloc!='1' || ptr == NULL){
         perror("invalid free \n");
     }
-    pthread_mutex_lock(&lock);
+    // pthread_mutex_lock(&lock);
     blk->alloc = '0';
     meta_t * curr = start;
     int flag = 0; //indicator whether the block is in the middle of the doubly linked free list or the last
@@ -192,7 +196,6 @@ void ts_free_lock(void *ptr){
     }
     merge_free_blk(blk);
     pthread_mutex_unlock(&lock);
-
 }
 
 
