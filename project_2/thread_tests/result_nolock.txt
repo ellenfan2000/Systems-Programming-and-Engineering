@@ -1,50 +1,50 @@
 1
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.128752 seconds
-Data Segment Size = 43341408 bytes
+Execution Time = 0.129675 seconds
+Data Segment Size = 44290304 bytes
 2
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.156230 seconds
-Data Segment Size = 43545536 bytes
+Execution Time = 0.134167 seconds
+Data Segment Size = 43808032 bytes
 3
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.160115 seconds
-Data Segment Size = 43049088 bytes
+Execution Time = 0.150918 seconds
+Data Segment Size = 43178912 bytes
 4
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.158414 seconds
-Data Segment Size = 44185568 bytes
+Execution Time = 0.147600 seconds
+Data Segment Size = 43506176 bytes
 5
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.222418 seconds
-Data Segment Size = 42914752 bytes
+Execution Time = 0.184450 seconds
+Data Segment Size = 44064192 bytes
 6
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.199458 seconds
-Data Segment Size = 43693088 bytes
+Execution Time = 0.170634 seconds
+Data Segment Size = 44885728 bytes
 7
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.196449 seconds
-Data Segment Size = 43375296 bytes
+Execution Time = 0.156336 seconds
+Data Segment Size = 43187840 bytes
 8
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.136662 seconds
-Data Segment Size = 44148768 bytes
+Execution Time = 0.124960 seconds
+Data Segment Size = 43967104 bytes
 9
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.162166 seconds
-Data Segment Size = 43004224 bytes
+Execution Time = 0.148306 seconds
+Data Segment Size = 44570880 bytes
 10
 No overlapping allocated regions found!
 Test passed
-Execution Time = 0.128375 seconds
-Data Segment Size = 43072736 bytes
+Execution Time = 0.159238 seconds
+Data Segment Size = 43883264 bytes
