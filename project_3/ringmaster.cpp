@@ -95,13 +95,59 @@ int main(int argc, char *argv[])
         }
     }
 
-    vector<int> trace;
+    //players are ready
+    //play the game
+
+    Potato p = Potato(num_hops);
     srand(42);
     int first = rand() % num_players;
     cout<<"Ready to start the game, sending potato to player " << first<<endl;
+    // p.trace[0] = first;
+    // p.count ++;
+
+    // cout<<"Potato has " <<p.hops << " left"<<endl;
+    // cout<<"Potato has gone through " <<p.count <<endl;
+
+    // char text = 'a';
+    // status = send(fd_list[next+1], &p,sizeof(p),0);
+    // status = send(player_connection_ids[first], &text, sizeof(text), 0);
+    // if(status == -1 ){
+    //     cout <<"send error "<<errno<<endl;
+    // }
+    byte1 = send(player_connection_ids[first], &p, sizeof(p), 0);
+    cout<<"successfully send " << byte1<<endl;
+
+    struct timeval time;
+    time.tv_sec = 10;
+    time.tv_usec = 0;
     
-    //players are ready
-    //play the game
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    int nfds = player_connection_ids[first];
+    for(int i = 0;i < num_players; i++){
+        FD_SET(player_connection_ids[i], &readfds);
+        if(nfds < player_connection_ids[i]){
+            nfds = player_connection_ids[i];
+        }
+    }
+    status = select(nfds+1, &readfds, NULL, NULL, NULL);
+    errorHandle(status, "Error: select error", NULL, NULL);
+    if(status == 0){
+        cout<<"listen time limit"<<endl;
+    }
+    else if(status == 1){
+        for(int i = 0;i < 3; i++){
+            if(FD_ISSET(player_connection_ids[i], &readfds)){
+                recv(player_connection_ids[i], &p,sizeof(p),0);
+                // recv(player_connection_ids[i], &text,sizeof(text),0);
+            }
+        }
+    }
+    cout<<"Trace of potato:"<<endl;
+    for(int j = 0; j<=p.count; j++){
+        cout<<p.trace[j]<<" ";
+    }
+    cout<<endl;
     close(socket_fd);
 
     return 0;

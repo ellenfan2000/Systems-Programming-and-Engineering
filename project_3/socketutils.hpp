@@ -2,6 +2,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <string>
+#include "potato.hpp"
 
 struct playerInfo_t{
     char * hostname;
@@ -86,3 +87,37 @@ int buildClient(const char * hostname, const char * port){
     freeaddrinfo(host_info_list);
     return socket_fd;
 }
+
+//some text code
+// char text;
+    // if(info[0] == 1){
+    //     status = recv(socket_ringmaster, &text,sizeof(text),MSG_WAITALL);
+    //     if(status == -1){
+    //         cerr<<"recieve Wrong" <<endl;
+    //     }
+    // }
+    // else{
+    //     status = recv(socket_prev, &text,sizeof(text),MSG_WAITALL);
+    //     if(status == -1){
+    //         cerr<<"recieve Wrong"<<endl;
+    //     }
+    // }
+
+    // cout <<"Recieved is "<<text<<endl;
+    // text++;
+    // if(info[0] == info[1]-1){
+    //     status = send(socket_ringmaster, &text,sizeof(text),0);
+    //     if(status == -1){
+    //         cerr<<"send Wrong "<<errno <<endl;
+    //     }
+    // }
+
+    // status = send(socket_next, &text,sizeof(text),0);
+    // if(status == -1){
+    //     cout<<"send Wrong next "<<errno<<endl;
+    // }
+        // status = send(socket_prev, &text,sizeof(text),0);
+        // if(status == -1){
+        //     cout<<"sned Wrong prev";
+        // }
+    // cout<<"nfds is" << nfds <<endl;
