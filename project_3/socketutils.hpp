@@ -4,15 +4,12 @@
 #include <string>
 #include "potato.hpp"
 
-struct playerInfo_t{
-    char * hostname;
-    char * port;
-};
-
 void errorHandle(int status, std::string message,const char * hostname, const char * port){
     if (status < 0) {
         std::cerr << message << std::endl;
-        std::cerr << "  (" << hostname << "," << port << ")" << std::endl;
+        if(hostname!=NULL && port != NULL){
+            std::cerr << "  (" << hostname << "," << port << ")" << std::endl;
+        }
         exit(EXIT_FAILURE);
     } 
 }
@@ -22,6 +19,7 @@ int buildServer(const char * port){
     struct addrinfo host_info;
     struct addrinfo *host_info_list;
     int status, socket_fd;
+
     memset(&host_info, 0, sizeof(host_info));
 
     host_info.ai_family   = AF_INET;
@@ -31,6 +29,7 @@ int buildServer(const char * port){
     status = getaddrinfo(hostname, port, &host_info, &host_info_list);
     errorHandle(status,"Error: cannot get address info for host", hostname, port);
 
+    //generate a port
     if(port == ""){
         ((struct sockaddr_in *)host_info_list->ai_addr)->sin_port = 0;
     }
@@ -51,15 +50,7 @@ int buildServer(const char * port){
     errorHandle(status,"Error: cannot listen on socket",hostname, port);
 
     freeaddrinfo(host_info_list);
-    // std::cout << "Builded " << std::endl;
     return socket_fd;
-
-    // char buffer[512];
-        // recv(player_connection_ids[num], buffer, 9, 0);
-        // buffer[9] = 0;
-
-        // cout << "Server received: " << buffer << endl;
-
 }
 
 int buildClient(const char * hostname, const char * port){
@@ -80,15 +71,13 @@ int buildClient(const char * hostname, const char * port){
                 host_info_list->ai_protocol);
     errorHandle(socket_fd,"Error: cannot create socket" , hostname, port);
 
-    // std::cout << "Connecting to " << hostname << " on port " << port << "..." << std::endl;
-
     status = connect(socket_fd, host_info_list->ai_addr, host_info_list->ai_addrlen);
     errorHandle(status, "Error: cannot connect to socket", hostname, port);
     freeaddrinfo(host_info_list);
     return socket_fd;
 }
 
-//some text code
+//some test code
 // char text;
     // if(info[0] == 1){
     //     status = recv(socket_ringmaster, &text,sizeof(text),MSG_WAITALL);

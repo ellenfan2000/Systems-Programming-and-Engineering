@@ -12,9 +12,31 @@
 
 using namespace std;
 
+int connect_to_player(int socket_ringmaster){
+    int status;
+    char prev_hostname[512];
+    unsigned short int prev_port;
+    char prev_port_name[9];
+    status = recv(socket_ringmaster, &prev_port, sizeof(prev_port), 0);
+    if(status == 0){
+        cerr<<"Error: connection is cloesd"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    errorHandle(status,"Error: recieve failed",NULL, NULL);
+    status = recv(socket_ringmaster, prev_hostname, 32, 0);
+    if(status == 0){
+        cerr<<"Error: connection is cloesd"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    errorHandle(status,"Error: recieve failed",NULL, NULL);
+    prev_hostname[32] = 0;
+    sprintf(prev_port_name, "%u", prev_port);
+    // cout<<"Recieve hostname "<< prev_hostname <<" recieve port number " <<prev_port_name<<endl;
+    return buildClient(prev_hostname, prev_port_name);
+}
+
 int main(int argc, char *argv[])
 {
-
     if (argc < 3) {
         cout << "Syntax: player <machine_name> <port_num>\n" << endl;
         return 1;
@@ -25,67 +47,65 @@ int main(int argc, char *argv[])
     const char *port = argv[2];
     int socket_ringmaster, socket_prev, socket_next;
 
-    // char name[32];
-    // gethostname(name,sizeof(name));
-    // cout<<"current host name"<<name<<endl;
     //connect to ringmaster
     socket_ringmaster = buildClient(hostname, port);
 
     //recieve player id
     int info[2];
-    recv(socket_ringmaster, &info, sizeof(info), 0);
+    status = recv(socket_ringmaster, &info, sizeof(info), 0);
+    if(status == 0){
+        cerr<<"Error: connection is cloesd"<<endl;
+        exit(EXIT_FAILURE);
+    }
+    errorHandle(status,"Error: recieve failed",NULL, NULL);
     cout << "Connected as player "<< info[0]<<" out of " << info[1] <<" total players" << endl;
 
     //build Server
     socket_next = buildServer("");
+
     //get port number
     struct sockaddr_storage socket_addr;
     socklen_t socket_addr_len = sizeof(socket_addr);
     status = getsockname(socket_next,(struct sockaddr *)&socket_addr, &socket_addr_len);
+    errorHandle(status,"Error: cannot get port info from socket", NULL, NULL);
     unsigned short int port_listen = ntohs(((struct sockaddr_in *) &socket_addr)->sin_port);
-    errorHandle(status,"Error: cannot get port info from socket", NULL, port);
     // cout << "Send port number " << port_listen << endl;
 
     //send port info，ip info to ringmaster
-    int byte = send(socket_ringmaster, &port_listen, sizeof(port_listen), 0);
+    char name[512];
+    gethostname(name,sizeof(name));
+    // cout<<"current host name "<<name<<endl;
+    status = send(socket_ringmaster, name, sizeof(name), 0);
+    errorHandle(status,"Error: send failed",NULL, NULL);
+    status = send(socket_ringmaster, &port_listen, sizeof(port_listen), 0);
+    errorHandle(status,"Error: send failed",NULL, NULL);
 
-    char prev_hostname[100];
+    //connect to the previous player
+    char prev_hostname[512];
     unsigned short int prev_port;
     char prev_port_name[9];
 
     if(info[0]> 0){
-        // recv(socket_ringmaster, &prev, sizeof(prev), 0);
-        recv(socket_ringmaster, &prev_port, sizeof(prev_port), 0);
-        recv(socket_ringmaster, prev_hostname, 32, 0);
-        prev_hostname[32] = 0;
-        sprintf(prev_port_name, "%u", prev_port);
-        socket_prev = buildClient(prev_hostname, prev_port_name);
+        socket_prev = connect_to_player(socket_ringmaster);
     }
     
     // cout<<"waiting for connection "<<endl;
+    //connect with the next player
     struct sockaddr_storage socket_addr_next;
     socklen_t socket_addr_len_next = sizeof(socket_addr_next);
     socket_next = accept(socket_next, (struct sockaddr *)&socket_addr_next, &socket_addr_len_next);
     // cout << "connect to" <<ntohs(((struct sockaddr_in *)&socket_addr_next)->sin_port)<<endl;
-    errorHandle(status,"cannot accept", hostname, NULL);
-
-    // cout<<"connect to next "<<endl;
-
-
+    errorHandle(status,"Error: cannot accept", hostname, NULL);
 
     if(info[0] == 0){
-        recv(socket_ringmaster, &prev_port, sizeof(prev_port), 0);
-        recv(socket_ringmaster, prev_hostname, 32, 0);
-        prev_hostname[32] = 0;
-        sprintf(prev_port_name, "%u", prev_port);
-        // cout<<"Recieve hostname "<< prev_hostname <<" recieve port number " <<prev_port_name<<endl;
-        socket_prev = buildClient(prev_hostname, prev_port_name);
+        socket_prev = connect_to_player(socket_ringmaster);
     }
     // cout<<"Recieve hostname "<< prev_hostname <<" recieve port number " <<prev_port_name <<endl;  
 
     //Player ready
     char message = 'R';
-    byte = send(socket_ringmaster, &message, sizeof(message), 0);
+    status = send(socket_ringmaster, &message, sizeof(message), 0);
+    errorHandle(status,"Error: send failed",NULL, NULL);
 
     //start play
     srand((unsigned int)time(NULL)+info[0]);
@@ -96,6 +116,7 @@ int main(int argc, char *argv[])
     
     fd_set master;
     fd_set readfds;
+
     //get next players id
     int neighbor_ids[2] = {info[0]-1, info[0]+1};
     if(info[0] == 0){
@@ -121,20 +142,16 @@ int main(int argc, char *argv[])
     while(true){
         memset(&p, 0,sizeof(p));
         fd_set readfds = master;
-        // don't care about writefds and exceptfds:
         //recieve potato
         status = select(nfds, &readfds, NULL, NULL, NULL);
-        // cout<<status<<endl;
         errorHandle(status, "Error: select error", NULL, NULL);
         if(status == 0){
             cout<<"listen time limit"<<endl;
             break;
         }
         else if(status == 1){       
-            // if(FD_ISSET(socket_ringmaster, &readfds)){
-            //     recv(socket_ringmaster, &p,sizeof(p),0);
             int socket;
-            // }
+            //get the sender
             for(int i = 0;i < 3; i++){
                 if(FD_ISSET(fd_list[i], &readfds)){
                     socket = fd_list[i];
@@ -143,20 +160,21 @@ int main(int argc, char *argv[])
             }
             // cout<<"Socket "<< socket <<endl;
             status = recv(socket, &p,sizeof(p),0);
-            if(status == -1){
-                cerr<<"recieve Wrong"<<endl;
-            }
-            if(status == 0){
+            errorHandle(status,"Error: recieve failed",NULL, NULL);
+            if(status == 0){//somebody droped
+                cerr<<"Error: connection is cloesd"<<endl;
                 break;
             }
-            if(p.hops == 0){
+            if(p.hops == 0){ //the last one
                 p.trace[p.count] = (char)info[0]+'0';
                 status = send(socket_ringmaster, &p,sizeof(p),0) ;
                 if(status == -1 ){
                     cout <<"send error "<<errno<<endl;
                 }
-                // cout<<"Sending potato to RingMaster for "<< status << " byte "<<endl;
                 cout<<"I am it."<<endl;
+            }
+            else if(p.hops == -1){//game is over
+                // cout<<"game over recieve" <<endl;
                 break;
             }
             else{
@@ -165,16 +183,12 @@ int main(int argc, char *argv[])
                 p.hops--;
                 int next = rand()%2;
                 status = send(fd_list[next+1], &p,sizeof(p),0);
-                if(status == -1 ){
-                    cout <<"send error "<<errno<<fd_list[next+1]<<endl;
-                }
+                errorHandle(status,"Error: send failed",NULL, NULL);
                 cout<<"Sending potato to "<< neighbor_ids[next]<<endl;
             }
         }else{
-            // cout<<"more than one send"<<endl; 
             break;
         }
-
     }
 
     close(socket_prev);
