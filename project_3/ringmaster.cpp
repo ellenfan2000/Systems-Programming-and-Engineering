@@ -194,8 +194,11 @@ int main(int argc, char *argv[])
     }
     cout<<endl;
 
+    for(int i = 0; i < num_players; i++){
+        close(player_connection_ids[i]);
+    }
 
     close(socket_fd);
 
     return 0;
-    }
+}
