@@ -13,6 +13,16 @@ void errorHandle(int status, std::string message,const char * hostname, const ch
         exit(EXIT_FAILURE);
     } 
 }
+void connectionEnd(int byte){
+    // std::string message = "Connection ends";
+    if(byte == 0){
+        std::cerr << "Connection ends" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    else{
+        errorHandle(byte, "Error: Recieve failed", NULL, NULL);
+    }
+}
 
 int buildServer(const char * port){
     const char * hostname = NULL;

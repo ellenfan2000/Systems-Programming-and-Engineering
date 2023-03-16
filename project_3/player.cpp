@@ -18,18 +18,12 @@ int connect_to_player(int socket_ringmaster){
     unsigned short int prev_port;
     char prev_port_name[9];
     status = recv(socket_ringmaster, &prev_port, sizeof(prev_port), 0);
-    if(status == 0){
-        cerr<<"Error: connection is cloesd"<<endl;
-        exit(EXIT_FAILURE);
-    }
-    errorHandle(status,"Error: recieve failed",NULL, NULL);
-    status = recv(socket_ringmaster, prev_hostname, 32, 0);
-    if(status == 0){
-        cerr<<"Error: connection is cloesd"<<endl;
-        exit(EXIT_FAILURE);
-    }
-    errorHandle(status,"Error: recieve failed",NULL, NULL);
-    prev_hostname[32] = 0;
+    connectionEnd(status);
+    
+    status = recv(socket_ringmaster, prev_hostname, 512, 0);
+    connectionEnd(status);
+
+    prev_hostname[512] = 0;
     sprintf(prev_port_name, "%u", prev_port);
     // cout<<"Recieve hostname "<< prev_hostname <<" recieve port number " <<prev_port_name<<endl;
     return buildClient(prev_hostname, prev_port_name);
@@ -53,11 +47,8 @@ int main(int argc, char *argv[])
     //recieve player id
     int info[2];
     status = recv(socket_ringmaster, &info, sizeof(info), 0);
-    if(status == 0){
-        cerr<<"Error: connection is cloesd"<<endl;
-        exit(EXIT_FAILURE);
-    }
-    errorHandle(status,"Error: recieve failed",NULL, NULL);
+    connectionEnd(status);
+    // errorHandle(status,"Error: recieve failed",NULL, NULL);
     cout << "Connected as player "<< info[0]<<" out of " << info[1] <<" total players" << endl;
 
     //build Server
@@ -69,27 +60,24 @@ int main(int argc, char *argv[])
     status = getsockname(socket_next,(struct sockaddr *)&socket_addr, &socket_addr_len);
     errorHandle(status,"Error: cannot get port info from socket", NULL, NULL);
     unsigned short int port_listen = ntohs(((struct sockaddr_in *) &socket_addr)->sin_port);
-    // cout << "Send port number " << port_listen << endl;
 
     //send port info，ip info to ringmaster
     char name[512];
+    memset(name, 0, 512);
     gethostname(name,sizeof(name));
     // cout<<"current host name "<<name<<endl;
     status = send(socket_ringmaster, name, sizeof(name), 0);
-    errorHandle(status,"Error: send failed",NULL, NULL);
+    errorHandle(status,"Error: send hostname failed",NULL, NULL);
     status = send(socket_ringmaster, &port_listen, sizeof(port_listen), 0);
-    errorHandle(status,"Error: send failed",NULL, NULL);
+    errorHandle(status,"Error: send port number failed", NULL, NULL);
+
+    // std::cout << "Send port number " << port_listen <<" SEND Hostname "<<name<< endl;
 
     //connect to the previous player
-    char prev_hostname[512];
-    unsigned short int prev_port;
-    char prev_port_name[9];
-
     if(info[0]> 0){
         socket_prev = connect_to_player(socket_ringmaster);
     }
     
-    // cout<<"waiting for connection "<<endl;
     //connect with the next player
     struct sockaddr_storage socket_addr_next;
     socklen_t socket_addr_len_next = sizeof(socket_addr_next);
@@ -140,7 +128,6 @@ int main(int argc, char *argv[])
 
     //listen to incoming patatos and end
     while(true){
-        memset(&p, 0,sizeof(p));
         fd_set readfds = master;
         //recieve potato
         status = select(nfds, &readfds, NULL, NULL, NULL);
@@ -159,19 +146,21 @@ int main(int argc, char *argv[])
                 }
             }
             // cout<<"Socket "<< socket <<endl;
+            memset(&p, 0,sizeof(p));
             status = recv(socket, &p,sizeof(p),0);
-            errorHandle(status,"Error: recieve failed",NULL, NULL);
-            if(status == 0){//somebody droped
-                cerr<<"Error: connection is cloesd"<<endl;
-                break;
-            }
+            connectionEnd(status);
+            // errorHandle(status,"Error: recieve failed",NULL, NULL);
+            // if(status == 0){//somebody droped
+            //     cerr<<"Error: connection is cloesd"<<endl;
+            //     break;
+            // }
             if(p.hops == 0){ //the last one
                 p.trace[p.count] = (char)info[0]+'0';
                 status = send(socket_ringmaster, &p,sizeof(p),0) ;
                 if(status == -1 ){
                     cout <<"send error "<<errno<<endl;
                 }
-                cout<<"I am it."<<endl;
+                cout<<"I'm it"<<endl;
             }
             else if(p.hops == -1){//game is over
                 // cout<<"game over recieve" <<endl;
@@ -193,7 +182,6 @@ int main(int argc, char *argv[])
 
     close(socket_prev);
     close(socket_next);
-    // freeaddrinfo(host_info_list2);
     close(socket_ringmaster);
 
 
