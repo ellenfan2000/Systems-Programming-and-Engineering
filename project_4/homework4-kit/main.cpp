@@ -93,7 +93,7 @@ void parse_tuple(std::vector<std::string> line, connection * C, string sql){
   sql +=tuple + ";";
   W.exec(sql);
   W.commit();
-  // std::cout<<sql<<endl;
+  std::cout<<sql<<endl;
 }
 
 void add_tuple_from_file(string fname, connection * C, string sql){
@@ -130,23 +130,22 @@ int main(int argc, char * argv[]) {
       cout << "Can't open database" << endl;
       return 1;
     }
+    //remove all the existed dataBase, if any exist;
+    dropTable(C, 4, "PLAYER", "TEAM", "STATE", "COLOR");
+
+    //TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL database
+    //      load each table with rows from the provided source txt files
+    createTables(C);
+    add_tuple_from_file("player.txt", C, "INSERT INTO \"PLAYER\" (TEAM_ID, UNIFORM_NUM, FIRST_NAME, LAST_NAME, MPG, PPG, RPG, APG, SPG, BPG) VALUES ");
+    add_tuple_from_file("team.txt", C, "INSERT INTO \"TEAM\" (NAME, STATE_ID, COLOR_ID, WINS, LOSSES) VALUES ");
+    add_tuple_from_file("state.txt", C, "INSERT INTO \"STATE\" (NAME) VALUES ");
+    add_tuple_from_file("color.txt", C, "INSERT INTO \"COLOR\" (NAME) VALUES ");
+    exercise(C);
   }
   catch (const std::exception & e) {
     cerr << e.what() << std::endl;
     return 1;
   }
-
-  //remove all the existed dataBase, if any exist;
-  dropTable(C, 4, "PLAYER", "TEAM", "STATE", "COLOR");
-
-  //TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL database
-  //      load each table with rows from the provided source txt files
-  createTables(C);
-  add_tuple_from_file("player.txt", C, "INSERT INTO \"PLAYER\" (TEAM_ID, UNIFORM_NUM, FIRST_NAME, LAST_NAME, MPG, PPG, RPG, APG, SPG, BPG) VALUES ");
-  add_tuple_from_file("team.txt", C, "INSERT INTO \"TEAM\" (NAME, STATE_ID, COLOR_ID, WINS, LOSSES) VALUES ");
-  add_tuple_from_file("state.txt", C, "INSERT INTO \"STATE\" (NAME) VALUES ");
-  add_tuple_from_file("color.txt", C, "INSERT INTO \"COLOR\" (NAME) VALUES ");
-  exercise(C);
 
   //Close database connection
   C->disconnect();
