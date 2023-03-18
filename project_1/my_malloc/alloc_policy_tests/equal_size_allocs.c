@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
   for (i=0; i < NUM_ITEMS; i++) {
     FREE(array[i]);
   } //for i
-
+  // printf("prepare done");
   //Start Time
   clock_gettime(CLOCK_MONOTONIC, &start_time);
 
@@ -60,22 +60,21 @@ int main(int argc, char *argv[])
       array[j] = (int *)MALLOC(ALLOC_SIZE);
     } //for j
 
+    // printf("prepare %d \n", i);
     for (j=1000; j < NUM_ITEMS; j++) {
       array[j] = (int *)MALLOC(ALLOC_SIZE);
       FREE(array[j-1000]);
 
       if ((i==NUM_ITERS/2) && (j==NUM_ITEMS/2)) {
-	//Record fragmentation halfway through (try to repsresent steady state)
-	data_segment_size = get_data_segment_size();
-	data_segment_free_space = get_data_segment_free_space_size();
+	      //Record fragmentation halfway through (try to repsresent steady state)
+        data_segment_size = get_data_segment_size();
+        data_segment_free_space = get_data_segment_free_space_size();
       } //if
     } //for j
-
     for (j=NUM_ITEMS-1000; j < NUM_ITEMS; j++) {
       FREE(array[j]);
     } //for j
   } //for i
-
   //Stop Time
   clock_gettime(CLOCK_MONOTONIC, &end_time);
 

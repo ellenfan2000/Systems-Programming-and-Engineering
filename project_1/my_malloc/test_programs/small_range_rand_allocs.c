@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
 #include "my_malloc.h"
 
 #define NUM_ITERS    100
@@ -15,6 +18,33 @@
 #define FREE(p)    bf_free(p)
 #endif
 
+char dumb_hash(void* p) {
+    unsigned char h = (unsigned char) (17*(uintptr_t)p*(uintptr_t)p + 7*(uintptr_t)p + 3*((uintptr_t)p>>8)); // dumb garbage fake hash
+    return h;
+}
+
+void* MALLOC_WITH_CHECK(size_t sz) {
+    void* p = MALLOC(sz);
+    unsigned char h = dumb_hash(p);
+    memset(p,h,sz);
+    return p;
+}
+
+bool FREE_WITH_CHECK(void* p, size_t sz) {
+    bool r = true;
+    unsigned char h = dumb_hash(p);
+    int i;
+    unsigned char* cp = p;
+    for (i=0; i<sz; i++, cp++) {
+        if (*cp != h) {
+            r = false;
+            //printf("p=%p cp=%p *cp=%x h=%x\n",p,cp,*cp,h);
+            break;
+        }
+    }
+    FREE(p);
+    return r;
+}
 
 double calc_time(struct timespec start, struct timespec end) {
   double start_sec = (double)start.tv_sec*1000000000.0 + (double)start.tv_nsec;
@@ -46,6 +76,16 @@ int main(int argc, char *argv[])
   unsigned long data_segment_size;
   unsigned long data_segment_free_space;
   struct timespec start_time, end_time;
+  
+  int num_iters = NUM_ITERS;
+  if (argc>=2) {
+      num_iters = atoi(argv[1]);
+      if (num_iters==0) {
+          printf("Syntax: %s [num_iters_override]\n",argv[0]);
+          return 1;
+      }
+      num_iters &= -2; // make it a multiple of 2
+  }
 
   srand(0);
 
@@ -69,25 +109,31 @@ int main(int argc, char *argv[])
 
 
   for (i=0; i < NUM_ITEMS; i++) {
-    malloc_items[0][i].address = (int *)MALLOC(malloc_items[0][i].bytes);
+    malloc_items[0][i].address = (int *)MALLOC_WITH_CHECK(malloc_items[0][i].bytes);
   } //for i
 
+  bool r = false;
 
   //Start Time
   clock_gettime(CLOCK_MONOTONIC, &start_time);
-
-  for (i=0; i < NUM_ITERS; i++) {
+  
+  for (i=0; i < num_iters; i++) {
     unsigned malloc_set = i % 2;
+    printf("\rIteration %5d / %5d (%.1f%%)", i, num_iters, (float)i/num_iters*100); fflush(stdout);
     for (j=0; j < NUM_ITEMS; j+=50) {
       for (k=0; k < 50; k++) {
-	unsigned item_to_free = free_list[j+k];
-	FREE(malloc_items[malloc_set][item_to_free].address);
+        unsigned item_to_free = free_list[j+k];
+        r = FREE_WITH_CHECK(malloc_items[malloc_set][item_to_free].address, malloc_items[malloc_set][item_to_free].bytes);
+        if (!r) {
+          printf("ERROR: Content check failed while freeing %p\n", malloc_items[malloc_set][item_to_free].address);
+        }
       } //for k
       for (k=0; k < 50; k++) {
-	malloc_items[1-malloc_set][j+k].address = (int *)MALLOC(malloc_items[1-malloc_set][j+k].bytes);
+        malloc_items[1-malloc_set][j+k].address = (int *)MALLOC_WITH_CHECK(malloc_items[1-malloc_set][j+k].bytes);
       } //for k
     } //for j
   } //for i
+  printf("\n\n");
 
   //Stop Time
   clock_gettime(CLOCK_MONOTONIC, &end_time);
@@ -101,7 +147,10 @@ int main(int argc, char *argv[])
   printf("Fragmentation  = %f\n", (float)data_segment_free_space/(float)data_segment_size);
 
   for (i=0; i < NUM_ITEMS; i++) {
-    FREE(malloc_items[0][i].address);
+    r = FREE_WITH_CHECK(malloc_items[0][i].address, malloc_items[0][i].bytes);
+    if (!r) {
+      printf("ERROR: Content check failed while freeing %p\n", malloc_items[0][i].address);
+    }
   } //for i
 
   return 0;
