@@ -93,19 +93,31 @@ def query1(engine, use_mpg, min_mpg, max_mpg,
     stmt = select(Player.PLAYER_ID, Player.TEAM_ID, Player.UNIFORM_NUM, Player.FIRST_NAME, Player.LAST_NAME,
                   Player.MPG, Player.PPG, Player.RPG, Player.APG, Player.SPG, Player.BPG
                   )
-    if(use_mpg == 1):
-       stmt = stmt.where(Player.MPG >= min_mpg, Player.MPG <= max_mpg)
-    if(use_ppg == 1):
-       stmt = stmt.where(Player.PPG >= min_ppg, Player.PPG <= max_ppg)
-    if(use_rpg == 1):
-       stmt = stmt.where(Player.RPG >= min_rpg , Player.RPG <= max_rpg)
-    if(use_apg == 1):
-       stmt = stmt.where(Player.APG >= min_apg , Player.APG <= max_apg)
-    if(use_spg == 1):
-       stmt = stmt.where(Player.SPG >= min_spg, Player.SPG <= max_spg)
-    if(use_bpg == 1):
-       stmt = stmt.where(Player.BPG >= min_bpg, Player.BPG <= max_bpg)
+   #  if(use_mpg == 1):
+   #     stmt = stmt.where(Player.MPG >= min_mpg, Player.MPG <= max_mpg)
+   #  if(use_ppg == 1):
+   #     stmt = stmt.where(Player.PPG >= min_ppg, Player.PPG <= max_ppg)
+   #  if(use_rpg == 1):
+   #     stmt = stmt.where(Player.RPG >= min_rpg , Player.RPG <= max_rpg)
+   #  if(use_apg == 1):
+   #     stmt = stmt.where(Player.APG >= min_apg , Player.APG <= max_apg)
+   #  if(use_spg == 1):
+   #     stmt = stmt.where(Player.SPG >= min_spg, Player.SPG <= max_spg)
+   #  if(use_bpg == 1):
+   #     stmt = stmt.where(Player.BPG >= min_bpg, Player.BPG <= max_bpg)
 
+    if(use_mpg == 1):
+       stmt = stmt.where(Player.MPG.between(min_mpg,max_mpg))
+    if(use_ppg == 1):
+       stmt = stmt.where(Player.PPG.between(min_ppg,max_ppg))
+    if(use_rpg == 1):
+       stmt = stmt.where(Player.RPG.between(min_rpg,max_rpg))
+    if(use_apg == 1):
+       stmt = stmt.where(Player.APG.between(min_apg,max_apg))
+    if(use_spg == 1):
+       stmt = stmt.where(Player.SPG.between(min_spg,max_spg))
+    if(use_bpg == 1):
+       stmt = stmt.where(Player.BPG.between(min_bpg,max_bpg))
     execute_query(session, stmt)
 
 '''

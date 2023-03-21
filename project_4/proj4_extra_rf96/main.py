@@ -54,6 +54,8 @@ if __name__ == '__main__':
         add_tuple_from_file("../homework4-kit/state.txt", engine)
         add_tuple_from_file("../homework4-kit/team.txt", engine)
         add_tuple_from_file("../homework4-kit/player.txt", engine)
+
+        
         query1(engine,1,20, 35,1,0,15,1,0,4,0,0,0,0,0,10,1,0,1)
         query2(engine, "Black")
         query3(engine, "Duke")

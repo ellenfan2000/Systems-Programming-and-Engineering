@@ -21,12 +21,12 @@ void dropTable(connection * c, int num_args, ...) {
   char * arg = va_arg(args, char *);
   sql = sql + "\"" + arg + "\";";
   va_end(args);
-  std::cout << sql << std::endl;
+  // std::cout << sql << std::endl;
   work W(*c);
   /* Execute SQL query */
   W.exec(sql);
   W.commit();
-  std::cout << "Remove existed tables" << std::endl;
+  // std::cout << "Remove existed tables" << std::endl;
 }
 
 void createTables(connection * C) {
@@ -40,8 +40,8 @@ void createTables(connection * C) {
                   "PPG             INT,"
                   "RPG             INT,"
                   "APG             INT,"
-                  "SPG             REAL,"
-                  "BPG             REAL);";
+                  "SPG             DOUBLE PRECISION,"
+                  "BPG             DOUBLE PRECISION);";
   string team = "CREATE TABLE \"TEAM\"("
                 "TEAM_ID       SERIAL      PRIMARY KEY     NOT NULL,"
                 "NAME          TEXT,"
@@ -65,7 +65,7 @@ void createTables(connection * C) {
   W.exec(state);
   W.exec(color);
   W.commit();
-  std::cout << "Create tables" << std::endl;
+  // std::cout << "Create tables" << std::endl;
 }
 
 std::vector<std::string> split(std::string str, char delimiter){
@@ -93,7 +93,7 @@ void parse_tuple(std::vector<std::string> line, connection * C, string sql){
   sql +=tuple + ";";
   W.exec(sql);
   W.commit();
-  std::cout<<sql<<endl;
+  // std::cout<<sql<<endl;
 }
 
 void add_tuple_from_file(string fname, connection * C, string sql){
@@ -124,7 +124,7 @@ int main(int argc, char * argv[]) {
     //Parameters: database name, user name, user password
     C = new connection("dbname=ACC_BBALL user=postgres password=passw0rd");
     if (C->is_open()) {
-      cout << "Opened database successfully: " << C->dbname() << endl;
+      // cout << "Opened database successfully: " << C->dbname() << endl;
     }
     else {
       cout << "Can't open database" << endl;

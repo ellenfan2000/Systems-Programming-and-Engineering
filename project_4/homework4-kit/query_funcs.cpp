@@ -21,7 +21,7 @@ void add_player(connection *C, int team_id, int jersey_num, string first_name, s
     <<mpg << ", "<< ppg <<", " <<rpg << ", " \
     <<apg << ", "<<spg << ", " <<bpg\
     << ");" ;
-  cout<<ss.str()<<endl;
+  // cout<<ss.str()<<endl;
   W.exec(ss.str());
   W.commit();
 }
@@ -34,7 +34,7 @@ void add_team(connection *C, string name, int state_id, int color_id, int wins, 
   ss<<"INSERT INTO \"TEAM\" (NAME, STATE_ID, COLOR_ID, WINS, LOSSES) VALUES ("
     <<W.quote(name) <<", "<<state_id<<", "<<color_id
     <<", "<<wins<<", "<<losses<< ");" ;
-  cout<<ss.str()<<endl;
+  // cout<<ss.str()<<endl;
   W.exec(ss.str());
   W.commit();
 
@@ -45,7 +45,7 @@ void add_state(connection *C, string name){
   std::stringstream ss;
   work W(*C);
   ss<<"INSERT INTO \"STATE\" (NAME) VALUES (" <<W.quote(name)<<");" ;
-  cout<<ss.str()<<endl;
+  // cout<<ss.str()<<endl;
   W.exec(ss.str());
   W.commit();
 }
@@ -55,7 +55,7 @@ void add_color(connection *C, string name){
   std::stringstream ss;
   work W(*C);
   ss<<"INSERT INTO \"COLOR\" (NAME) VALUES (" <<W.quote(name)<<");" ;
-  cout<<ss.str()<<endl;
+  // cout<<ss.str()<<endl;
   W.exec(ss.str());
   W.commit();
 }
@@ -90,32 +90,33 @@ void query1(connection *C,
   std::vector<string> where_clauses;
   std::stringstream clause;
   if(use_mpg ==1){
-    clause<< "MPG > " <<min_mpg << " AND MPG <= " << max_mpg;
+    clause<<"MPG BETWEEN " << min_mpg << " AND " << max_mpg;
+    // clause<< "MPG > " <<min_mpg << " AND MPG <= " << max_mpg;
     where_clauses.push_back(clause.str());
     clause.str("");
   }
   if(use_ppg ==1){
-    clause<< "PPG> " <<min_ppg << " AND PPG <= " << max_ppg;
+    clause<< "PPG BETWEEN " <<min_ppg << " AND " << max_ppg;
     where_clauses.push_back(clause.str());
     clause.str("");
   }
   if(use_rpg ==1){
-    clause<< "RPG > " <<min_rpg << " AND RPG <= " << max_rpg;
+    clause<< "RPG BETWEEN " <<min_rpg << " AND " << max_rpg;
     where_clauses.push_back(clause.str());
     clause.str("");
   }
   if(use_apg ==1){
-    clause<< "APG > " <<min_apg << " AND APG <= " << max_apg;
+    clause<< "APG BETWEEN " <<min_apg << " AND " << max_apg;
     where_clauses.push_back(clause.str());
     clause.str("");
   }
   if(use_spg ==1){
-    clause<< "SPG > " <<min_spg << " AND SPG <= " << max_spg;
+    clause<< "SPG BETWEEN " <<min_spg << " AND " << max_spg;
     where_clauses.push_back(clause.str());
     clause.str("");
   }
   if(use_bpg ==1){
-    clause<< "BPG > " <<min_bpg << " AND BPG <= " << max_bpg;
+    clause<< "BPG BETWEEN " <<min_bpg << " AND " << max_bpg;
     where_clauses.push_back(clause.str());
     clause.str("");
   }
@@ -148,7 +149,7 @@ void query1(connection *C,
     << std::setprecision(1) << c[9].as<double>()<< " " 
     << std::setprecision(1) << c[10].as<double>() << std::endl;
   }
-  cout << "Operation done successfully" << endl;
+  // cout << "Operation done successfully" << endl;
 }
 
 /**
