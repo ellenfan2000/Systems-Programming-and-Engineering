@@ -83,9 +83,9 @@ void playGame(int num_players, int num_hops, int * player_connection_ids ){
     cout<<"Trace of potato:"<<endl;
     for(int j = 0; j<=p.count; j++){
         if(j == 0){
-            cout<<p.trace[j];
+            cout<<p.trace[j]-'0';
         }else{
-            cout<<","<<p.trace[j];
+            cout<<","<<p.trace[j]-'0';
         }
     }
     cout<<endl;

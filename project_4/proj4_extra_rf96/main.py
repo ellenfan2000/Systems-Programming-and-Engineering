@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
 from query_funcs import *
+from exercise import *
 
 def parse_player_tuple(engine, str):
     words = str.split()
@@ -40,14 +41,12 @@ def add_tuple_from_file(fname,engine):
             return False
 
         
-
-
 if __name__ == '__main__':
     # create an engine to connect to a PostgreSQL database
     engine = create_engine('postgresql://postgres:passw0rd@0.0.0.0/ACC_BBALL')
     try:
         conn = engine.connect()
-        print('Connected successfully!')
+        # print('Connected successfully!')
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
         add_tuple_from_file("../homework4-kit/color.txt", engine)
@@ -55,12 +54,7 @@ if __name__ == '__main__':
         add_tuple_from_file("../homework4-kit/team.txt", engine)
         add_tuple_from_file("../homework4-kit/player.txt", engine)
 
-        
-        query1(engine,1,20, 35,1,0,15,1,0,4,0,0,0,0,0,10,1,0,1)
-        query2(engine, "Black")
-        query3(engine, "Duke")
-        query4(engine,  "NC", "DarkBlue")
-        query5(engine,  10)
+        exercise(engine)
         conn.close()
     except Exception as e:
         print('Failed to connect:', e)

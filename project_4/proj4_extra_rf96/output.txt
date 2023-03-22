@@ -1,0 +1,907 @@
+PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG
+2 1 0 Ky Bowman 29 14 5 3 1.2 0.1 
+3 1 25 Jordan Chatman 25 9 2 1 0.6 0.2 
+4 1 11 A.J. Turner 31 8 3 3 0.6 0.2 
+6 1 2 Connar Tava 25 6 5 2 0.7 0.3 
+7 1 15 Mo Jeffers 20 6 6 1 0.4 0.5 
+17 2 4 Shelton Mitchell 27 11 2 4 0.7 0.1 
+18 2 12 Avry Holmes 27 10 2 1 1.0 0.0 
+19 2 2 Marcquise Reed 22 10 2 2 1.4 0.0 
+21 2 15 Donte Grantham 28 7 4 2 0.8 0.6 
+22 2 10 Gabe DeVoe 24 7 3 2 1.1 0.2 
+23 2 50 Sidy Djitte 24 7 8 1 0.7 0.8 
+32 3 3 Grayson Allen 30 15 4 4 0.8 0.1 
+33 3 15 Frank Jackson 25 11 3 2 0.6 0.1 
+34 3 21 Amile Jefferson 30 11 8 2 0.7 1.9 
+35 3 13 Matt Jones 33 7 3 2 1.7 0.2 
+46 4 1 Jonathan Isaac 26 12 8 1 1.2 1.5 
+47 4 22 Xavier Rathan-Mayes 28 11 3 5 0.9 0.1 
+48 4 14 Terance Mann 25 8 5 2 1.0 0.2 
+59 5 44 Ben Lammers 35 14 9 2 1.2 3.4 
+60 5 1 Tadric Jackson 24 12 2 2 0.7 0.2 
+61 5 12 Quinton Stephens 33 10 8 2 1.2 0.7 
+62 5 11 Josh Heath 31 5 3 4 1.2 0.2 
+74 6 2 Quentin Snider 31 12 3 4 0.6 0.0 
+75 6 22 Deng Adel 30 12 5 2 0.6 0.4 
+76 6 10 Jaylen Johnson 21 8 6 1 0.5 0.5 
+77 6 12 Mangok Mathiang 21 8 6 1 0.5 1.1 
+87 7 5 Davon Reed 35 15 5 2 1.3 0.5 
+88 7 0 Ja'Quan Newton 31 14 4 3 1.1 0.0 
+89 7 11 Bruce BrownJr. 32 12 6 3 1.5 0.5 
+90 7 21 Kamari Murphy 29 7 7 1 0.4 0.7 
+91 7 3 Anthony LawrenceII 26 7 4 2 1.3 0.5 
+99 8 3 Terry Henderson 31 14 3 2 0.7 0.6 
+100 8 24 Maverick Rowan 30 12 4 1 0.6 0.2 
+101 8 0 Abdul-Malik Abu 29 12 7 1 0.4 0.9 
+102 8 2 Torin Dorn 24 10 5 1 0.4 0.1 
+105 8 11 Markell Johnson 20 4 2 2 0.9 0.3 
+113 9 2 Joel BerryII 30 15 3 4 1.4 0.1 
+114 9 3 Kennedy Meeks 24 13 10 1 1.0 1.2 
+115 9 4 Isaiah Hicks 23 12 6 1 0.4 0.7 
+117 9 24 Kenny Williams 24 6 3 2 0.9 0.3 
+118 9 1 Theo Pinson 24 6 5 4 0.9 0.2 
+128 10 3 V.J. Beachem 34 15 4 1 0.9 1.1 
+129 10 5 Matt Farrell 34 14 2 5 1.4 0.1 
+130 10 32 Steve Vasturia 35 13 4 3 1.2 0.1 
+131 10 0 Rex Pflueger 21 5 3 2 0.9 0.3 
+142 11 23 Cameron Johnson 33 12 5 2 0.9 0.3 
+143 11 21 Sheldon Jeter 29 8 7 2 0.9 1.0 
+144 11 12 Chris Jones 32 7 3 2 0.6 0.3 
+154 12 20 Tyler Lydon 36 13 9 2 1.0 1.4 
+155 12 25 Tyus Battle 31 11 2 2 1.3 0.2 
+156 12 4 John Gillon 30 11 2 5 1.4 0.0 
+159 12 21 Tyler Roberson 20 5 5 1 0.5 0.8 
+170 13 32 London Perrantes 32 13 3 4 0.7 0.1 
+172 13 4 Marial Shayok 21 9 2 1 0.9 0.3 
+173 13 0 Devon Hall 27 8 4 2 0.5 0.1 
+175 13 21 Isaiah Wilkins 27 7 6 1 1.0 1.3 
+176 13 51 Darius Thompson 21 6 2 2 0.8 0.4 
+185 14 4 Seth Allen 29 13 2 3 0.8 0.1 
+186 14 15 Chris Clarke 29 11 7 3 1.3 0.3 
+187 14 13 Ahmed Hill 30 11 3 1 0.2 0.2 
+188 14 5 Justin Robinson 32 10 3 5 0.7 0.2 
+189 14 10 Justin Bibbs 31 9 3 2 0.3 0.1 
+197 15 1 Keyshawn Woods 31 13 4 4 0.5 0.0 
+198 15 44 Konstantinos Mitoglou 25 9 6 1 0.6 0.7 
+199 15 34 Austin Arians 23 9 2 1 0.5 0.1 
+200 15 10 Mitchell Wilbekin 25 7 2 2 0.8 0.1 
+201 15 0 Brandon Childress 22 7 2 2 0.8 0.0 
+215 16 10 Meridith Grey 25 7 2 2 0.8 1.0 
+PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG
+2 1 0 Ky Bowman 29 14 5 3 1.2 0.1 
+3 1 25 Jordan Chatman 25 9 2 1 0.6 0.2 
+4 1 11 A.J. Turner 31 8 3 3 0.6 0.2 
+6 1 2 Connar Tava 25 6 5 2 0.7 0.3 
+17 2 4 Shelton Mitchell 27 11 2 4 0.7 0.1 
+18 2 12 Avry Holmes 27 10 2 1 1.0 0.0 
+19 2 2 Marcquise Reed 22 10 2 2 1.4 0.0 
+21 2 15 Donte Grantham 28 7 4 2 0.8 0.6 
+22 2 10 Gabe DeVoe 24 7 3 2 1.1 0.2 
+32 3 3 Grayson Allen 30 15 4 4 0.8 0.1 
+33 3 15 Frank Jackson 25 11 3 2 0.6 0.1 
+35 3 13 Matt Jones 33 7 3 2 1.7 0.2 
+47 4 22 Xavier Rathan-Mayes 28 11 3 5 0.9 0.1 
+48 4 14 Terance Mann 25 8 5 2 1.0 0.2 
+60 5 1 Tadric Jackson 24 12 2 2 0.7 0.2 
+62 5 11 Josh Heath 31 5 3 4 1.2 0.2 
+74 6 2 Quentin Snider 31 12 3 4 0.6 0.0 
+75 6 22 Deng Adel 30 12 5 2 0.6 0.4 
+87 7 5 Davon Reed 35 15 5 2 1.3 0.5 
+88 7 0 Ja'Quan Newton 31 14 4 3 1.1 0.0 
+91 7 3 Anthony LawrenceII 26 7 4 2 1.3 0.5 
+99 8 3 Terry Henderson 31 14 3 2 0.7 0.6 
+100 8 24 Maverick Rowan 30 12 4 1 0.6 0.2 
+102 8 2 Torin Dorn 24 10 5 1 0.4 0.1 
+105 8 11 Markell Johnson 20 4 2 2 0.9 0.3 
+113 9 2 Joel BerryII 30 15 3 4 1.4 0.1 
+117 9 24 Kenny Williams 24 6 3 2 0.9 0.3 
+118 9 1 Theo Pinson 24 6 5 4 0.9 0.2 
+128 10 3 V.J. Beachem 34 15 4 1 0.9 1.1 
+129 10 5 Matt Farrell 34 14 2 5 1.4 0.1 
+130 10 32 Steve Vasturia 35 13 4 3 1.2 0.1 
+131 10 0 Rex Pflueger 21 5 3 2 0.9 0.3 
+142 11 23 Cameron Johnson 33 12 5 2 0.9 0.3 
+144 11 12 Chris Jones 32 7 3 2 0.6 0.3 
+155 12 25 Tyus Battle 31 11 2 2 1.3 0.2 
+156 12 4 John Gillon 30 11 2 5 1.4 0.0 
+159 12 21 Tyler Roberson 20 5 5 1 0.5 0.8 
+170 13 32 London Perrantes 32 13 3 4 0.7 0.1 
+172 13 4 Marial Shayok 21 9 2 1 0.9 0.3 
+173 13 0 Devon Hall 27 8 4 2 0.5 0.1 
+176 13 51 Darius Thompson 21 6 2 2 0.8 0.4 
+185 14 4 Seth Allen 29 13 2 3 0.8 0.1 
+187 14 13 Ahmed Hill 30 11 3 1 0.2 0.2 
+188 14 5 Justin Robinson 32 10 3 5 0.7 0.2 
+189 14 10 Justin Bibbs 31 9 3 2 0.3 0.1 
+197 15 1 Keyshawn Woods 31 13 4 4 0.5 0.0 
+199 15 34 Austin Arians 23 9 2 1 0.5 0.1 
+200 15 10 Mitchell Wilbekin 25 7 2 2 0.8 0.1 
+201 15 0 Brandon Childress 22 7 2 2 0.8 0.0 
+215 16 10 Meridith Grey 25 7 2 2 0.8 1.0 
+PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG
+2 1 0 Ky Bowman 29 14 5 3 1.2 0.1 
+3 1 25 Jordan Chatman 25 9 2 1 0.6 0.2 
+4 1 11 A.J. Turner 31 8 3 3 0.6 0.2 
+6 1 2 Connar Tava 25 6 5 2 0.7 0.3 
+18 2 12 Avry Holmes 27 10 2 1 1.0 0.0 
+19 2 2 Marcquise Reed 22 10 2 2 1.4 0.0 
+21 2 15 Donte Grantham 28 7 4 2 0.8 0.6 
+22 2 10 Gabe DeVoe 24 7 3 2 1.1 0.2 
+33 3 15 Frank Jackson 25 11 3 2 0.6 0.1 
+35 3 13 Matt Jones 33 7 3 2 1.7 0.2 
+48 4 14 Terance Mann 25 8 5 2 1.0 0.2 
+60 5 1 Tadric Jackson 24 12 2 2 0.7 0.2 
+75 6 22 Deng Adel 30 12 5 2 0.6 0.4 
+87 7 5 Davon Reed 35 15 5 2 1.3 0.5 
+88 7 0 Ja'Quan Newton 31 14 4 3 1.1 0.0 
+91 7 3 Anthony LawrenceII 26 7 4 2 1.3 0.5 
+99 8 3 Terry Henderson 31 14 3 2 0.7 0.6 
+100 8 24 Maverick Rowan 30 12 4 1 0.6 0.2 
+102 8 2 Torin Dorn 24 10 5 1 0.4 0.1 
+105 8 11 Markell Johnson 20 4 2 2 0.9 0.3 
+117 9 24 Kenny Williams 24 6 3 2 0.9 0.3 
+128 10 3 V.J. Beachem 34 15 4 1 0.9 1.1 
+130 10 32 Steve Vasturia 35 13 4 3 1.2 0.1 
+131 10 0 Rex Pflueger 21 5 3 2 0.9 0.3 
+142 11 23 Cameron Johnson 33 12 5 2 0.9 0.3 
+144 11 12 Chris Jones 32 7 3 2 0.6 0.3 
+155 12 25 Tyus Battle 31 11 2 2 1.3 0.2 
+159 12 21 Tyler Roberson 20 5 5 1 0.5 0.8 
+172 13 4 Marial Shayok 21 9 2 1 0.9 0.3 
+173 13 0 Devon Hall 27 8 4 2 0.5 0.1 
+176 13 51 Darius Thompson 21 6 2 2 0.8 0.4 
+185 14 4 Seth Allen 29 13 2 3 0.8 0.1 
+187 14 13 Ahmed Hill 30 11 3 1 0.2 0.2 
+189 14 10 Justin Bibbs 31 9 3 2 0.3 0.1 
+199 15 34 Austin Arians 23 9 2 1 0.5 0.1 
+200 15 10 Mitchell Wilbekin 25 7 2 2 0.8 0.1 
+201 15 0 Brandon Childress 22 7 2 2 0.8 0.0 
+215 16 10 Meridith Grey 25 7 2 2 0.8 1.0 
+PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG
+3 1 25 Jordan Chatman 25 9 2 1 0.6 0.2 
+4 1 11 A.J. Turner 31 8 3 3 0.6 0.2 
+6 1 2 Connar Tava 25 6 5 2 0.7 0.3 
+21 2 15 Donte Grantham 28 7 4 2 0.8 0.6 
+33 3 15 Frank Jackson 25 11 3 2 0.6 0.1 
+60 5 1 Tadric Jackson 24 12 2 2 0.7 0.2 
+75 6 22 Deng Adel 30 12 5 2 0.6 0.4 
+99 8 3 Terry Henderson 31 14 3 2 0.7 0.6 
+100 8 24 Maverick Rowan 30 12 4 1 0.6 0.2 
+144 11 12 Chris Jones 32 7 3 2 0.6 0.3 
+159 12 21 Tyler Roberson 20 5 5 1 0.5 0.8 
+173 13 0 Devon Hall 27 8 4 2 0.5 0.1 
+176 13 51 Darius Thompson 21 6 2 2 0.8 0.4 
+185 14 4 Seth Allen 29 13 2 3 0.8 0.1 
+199 15 34 Austin Arians 23 9 2 1 0.5 0.1 
+200 15 10 Mitchell Wilbekin 25 7 2 2 0.8 0.1 
+201 15 0 Brandon Childress 22 7 2 2 0.8 0.0 
+215 16 10 Meridith Grey 25 7 2 2 0.8 1.0 
+PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG
+6 1 2 Connar Tava 25 6 5 2 0.7 0.3 
+21 2 15 Donte Grantham 28 7 4 2 0.8 0.6 
+75 6 22 Deng Adel 30 12 5 2 0.6 0.4 
+99 8 3 Terry Henderson 31 14 3 2 0.7 0.6 
+144 11 12 Chris Jones 32 7 3 2 0.6 0.3 
+159 12 21 Tyler Roberson 20 5 5 1 0.5 0.8 
+176 13 51 Darius Thompson 21 6 2 2 0.8 0.4 
+NAME
+UNC
+NAME
+Clemson
+Syracuse
+Virginia
+NAME
+Miami
+NAME
+Louisville
+NCSU
+NAME
+Duke
+NAME
+GeorgiaTech
+NotreDame
+WakeForest
+NAME
+BostonCollege
+FloridaState
+VirginiaTech
+NAME
+Pittsburgh
+NAME
+Duke Kunshan
+FIRST_NAME LAST_NAME
+Jerome Robinson
+Ky Bowman
+Jordan Chatman
+A.J. Turner
+Nik Popovic
+Connar Tava
+Mo Jeffers
+Ty Graves
+Mike Sagay
+Garland Owens
+Johncarlos Reyes
+Ervins Meznieks
+Gordon Gehan
+Aser Ghebremichael
+Matt DiLuccio
+FIRST_NAME LAST_NAME
+Jaron Blossomgame
+Shelton Mitchell
+Avry Holmes
+Marcquise Reed
+Elijah Thomas
+Donte Grantham
+Gabe DeVoe
+Sidy Djitte
+Scott Spencer
+Legend Robertin
+Isaac Fields
+Ty Hudson
+Lyles Davis
+Riley McGillan
+FIRST_NAME LAST_NAME
+Luke Kennard
+Jayson Tatum
+Grayson Allen
+Frank Jackson
+Amile Jefferson
+Matt Jones
+Harry Giles
+Chase Jeter
+Antonio Vrankovic
+Jack White
+Javin DeLaurier
+Marques Bolden
+Justin Robinson
+Nick Pagliuca
+Brennan Besser
+FIRST_NAME LAST_NAME
+Dwayne Bacon
+Jonathan Isaac
+Xavier Rathan-Mayes
+Terance Mann
+PJ Savoy
+Michael Ojo
+Trent Forrest
+CJ Walker
+Braian Angola
+Jarquez Smith
+Christ Koumadje
+Brandon Allen
+Phil Cofer
+FIRST_NAME LAST_NAME
+Josh Okogie
+Ben Lammers
+Tadric Jackson
+Quinton Stephens
+Josh Heath
+Justin Moore
+Christian Matthews
+Corey Heyward
+Sylvester Ogbonda
+Kellen McCormick
+Abdoulaye Gueye
+Shaheed Medlock
+Norman Harris
+Jodan Price
+Rand Rowland
+FIRST_NAME LAST_NAME
+Donovan Mitchell
+Quentin Snider
+Deng Adel
+Jaylen Johnson
+Mangok Mathiang
+Ray Spalding
+Anas Mahmoud
+V.J. King
+Tony Hicks
+Ryan McMahon
+David Levitch
+Matz Stockman
+Jay Henderson
+Tyler Sharpe
+FIRST_NAME LAST_NAME
+Davon Reed
+Ja'Quan Newton
+Bruce BrownJr.
+Kamari Murphy
+Anthony LawrenceII
+Dejan Vasiljevic
+Dewan Huell
+Ebuka Izundu
+Rodney MillerJr.
+Mike Robinson
+Chris Stowell
+FIRST_NAME LAST_NAME
+Dennis SmithJr.
+Terry Henderson
+Maverick Rowan
+Abdul-Malik Abu
+Torin Dorn
+Omer Yurtseven
+Ted Kapita
+Markell Johnson
+BeeJay Anya
+Shaun Kirk
+Chris CorchianiJr.
+Tucker Thompson
+Darius Hicks
+Chris Brickhouse
+FIRST_NAME LAST_NAME
+Ellis Grey
+Miranda Baily
+Amanda Bacon
+Meridith Grey
+Derek Shepherd
+Ellen Baily
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Luke Kennard
+0 Jayson Tatum
+3 Grayson Allen
+15 Frank Jackson
+21 Amile Jefferson
+13 Matt Jones
+1 Harry Giles
+2 Chase Jeter
+30 Antonio Vrankovic
+41 Jack White
+12 Javin DeLaurier
+20 Marques Bolden
+50 Justin Robinson
+45 Nick Pagliuca
+53 Brennan Besser
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+10 Amanda Bacon
+10 Miranda Baily
+10 Ellen Baily
+10 Meridith Grey
+10 Ellis Grey
+10 Derek Shepherd
+UNIFORM_NUM FIRST_NAME LAST_NAME
+32 Zach LeDay
+4 Seth Allen
+15 Chris Clarke
+13 Ahmed Hill
+5 Justin Robinson
+10 Justin Bibbs
+42 Ty Outlaw
+2 Khadim Sy
+22 Johnny Hamilton
+33 Matt Galloway
+14 Greg Donlon
+UNIFORM_NUM FIRST_NAME LAST_NAME
+4 Dwayne Bacon
+1 Jonathan Isaac
+22 Xavier Rathan-Mayes
+14 Terance Mann
+5 PJ Savoy
+50 Michael Ojo
+3 Trent Forrest
+2 CJ Walker
+11 Braian Angola
+23 Jarquez Smith
+21 Christ Koumadje
+40 Brandon Allen
+0 Phil Cofer
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Luke Kennard
+0 Jayson Tatum
+3 Grayson Allen
+15 Frank Jackson
+21 Amile Jefferson
+13 Matt Jones
+1 Harry Giles
+2 Chase Jeter
+30 Antonio Vrankovic
+41 Jack White
+12 Javin DeLaurier
+20 Marques Bolden
+50 Justin Robinson
+45 Nick Pagliuca
+53 Brennan Besser
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Josh Okogie
+44 Ben Lammers
+1 Tadric Jackson
+12 Quinton Stephens
+11 Josh Heath
+0 Justin Moore
+23 Christian Matthews
+30 Corey Heyward
+24 Sylvester Ogbonda
+32 Kellen McCormick
+34 Abdoulaye Gueye
+3 Shaheed Medlock
+13 Norman Harris
+2 Jodan Price
+42 Rand Rowland
+UNIFORM_NUM FIRST_NAME LAST_NAME
+3 Andrew WhiteIII
+20 Tyler Lydon
+25 Tyus Battle
+4 John Gillon
+12 Taurean Thompson
+32 DaJuan Coleman
+21 Tyler Roberson
+1 Frank Howard
+13 Paschal Chukwu
+35 Ray Featherston
+34 Doyin Akintobi-Adeyeye
+11 Adrian Autry
+54 Ky Feldman
+24 Shaun Belbey
+5 Mike Sutton
+14 Evan Dourdas
+33 Jonathan Radner
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+4 Dennis SmithJr.
+3 Terry Henderson
+24 Maverick Rowan
+0 Abdul-Malik Abu
+2 Torin Dorn
+14 Omer Yurtseven
+23 Ted Kapita
+11 Markell Johnson
+21 BeeJay Anya
+22 Shaun Kirk
+13 Chris CorchianiJr.
+42 Tucker Thompson
+5 Darius Hicks
+15 Chris Brickhouse
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Luke Kennard
+0 Jayson Tatum
+3 Grayson Allen
+15 Frank Jackson
+21 Amile Jefferson
+13 Matt Jones
+1 Harry Giles
+2 Chase Jeter
+30 Antonio Vrankovic
+41 Jack White
+12 Javin DeLaurier
+20 Marques Bolden
+50 Justin Robinson
+45 Nick Pagliuca
+53 Brennan Besser
+UNIFORM_NUM FIRST_NAME LAST_NAME
+20 John Collins
+13 Bryant Crawford
+1 Keyshawn Woods
+44 Konstantinos Mitoglou
+34 Austin Arians
+10 Mitchell Wilbekin
+0 Brandon Childress
+4 Doral Moore
+11 Greg McClinton
+2 Donovan Mitchell
+25 Sam Japhet-Mathias
+3 Aaron Spivey
+45 Troy Rike
+43 Trent VanHorn
+33 Rich Washington
+40 Anthony Bilas
+52 Britton Anderson
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+32 London Perrantes
+1 Austin Nichols
+4 Marial Shayok
+0 Devon Hall
+5 Kyle Guy
+21 Isaiah Wilkins
+51 Darius Thompson
+11 Ty Jerome
+31 Jarred Reuter
+25 Mamadi Diakite
+33 Jack Salt
+2 Justice Bartley
+24 Jeff Jones
+10 Trevon GrossJr.
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+32 Zach LeDay
+4 Seth Allen
+15 Chris Clarke
+13 Ahmed Hill
+5 Justin Robinson
+10 Justin Bibbs
+42 Ty Outlaw
+2 Khadim Sy
+22 Johnny Hamilton
+33 Matt Galloway
+14 Greg Donlon
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Davon Reed
+0 Ja'Quan Newton
+11 Bruce BrownJr.
+21 Kamari Murphy
+3 Anthony LawrenceII
+4 Dejan Vasiljevic
+20 Dewan Huell
+15 Ebuka Izundu
+14 Rodney MillerJr.
+2 Mike Robinson
+35 Chris Stowell
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+4 Dwayne Bacon
+1 Jonathan Isaac
+22 Xavier Rathan-Mayes
+14 Terance Mann
+5 PJ Savoy
+50 Michael Ojo
+3 Trent Forrest
+2 CJ Walker
+11 Braian Angola
+23 Jarquez Smith
+21 Christ Koumadje
+40 Brandon Allen
+0 Phil Cofer
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+45 Donovan Mitchell
+2 Quentin Snider
+22 Deng Adel
+10 Jaylen Johnson
+12 Mangok Mathiang
+13 Ray Spalding
+14 Anas Mahmoud
+0 V.J. King
+1 Tony Hicks
+30 Ryan McMahon
+23 David Levitch
+5 Matz Stockman
+11 Jay Henderson
+15 Tyler Sharpe
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+44 Justin Jackson
+2 Joel BerryII
+3 Kennedy Meeks
+4 Isaiah Hicks
+5 Tony Bradley
+24 Kenny Williams
+1 Theo Pinson
+32 Luke Maye
+0 Nate Britt
+14 Brandon Robinson
+21 Seventh Woods
+30 Stilman White
+11 Shea Rush
+13 Kanler Coker
+25 Aaron Rohlman
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Jaron Blossomgame
+4 Shelton Mitchell
+12 Avry Holmes
+2 Marcquise Reed
+14 Elijah Thomas
+15 Donte Grantham
+10 Gabe DeVoe
+50 Sidy Djitte
+22 Scott Spencer
+0 Legend Robertin
+11 Isaac Fields
+1 Ty Hudson
+3 Lyles Davis
+44 Riley McGillan
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+35 Bonzie Colson
+3 V.J. Beachem
+5 Matt Farrell
+32 Steve Vasturia
+0 Rex Pflueger
+2 TJ Gibbs
+4 Matt Ryan
+23 Martinas Geben
+1 Austin Torres
+33 John Mooney
+12 Elijah Burns
+30 Patrick Mazza
+21 Matt Gregory
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+2 Mike Young
+1 Jamel Artis
+23 Cameron Johnson
+21 Sheldon Jeter
+12 Chris Jones
+4 Ryan Luther
+55 Jonathan Milligan
+25 Rozelle Nix
+5 Justice Kithcart
+20 Ryan Seelye
+11 Corey Manigault
+3 Damon Wilson
+35 Zach Smith
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+5 Josh Okogie
+44 Ben Lammers
+1 Tadric Jackson
+12 Quinton Stephens
+11 Josh Heath
+0 Justin Moore
+23 Christian Matthews
+30 Corey Heyward
+24 Sylvester Ogbonda
+32 Kellen McCormick
+34 Abdoulaye Gueye
+3 Shaheed Medlock
+13 Norman Harris
+2 Jodan Price
+42 Rand Rowland
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+UNIFORM_NUM FIRST_NAME LAST_NAME
+1 Jerome Robinson
+0 Ky Bowman
+25 Jordan Chatman
+11 A.J. Turner
+21 Nik Popovic
+2 Connar Tava
+15 Mo Jeffers
+13 Ty Graves
+23 Mike Sagay
+5 Garland Owens
+12 Johncarlos Reyes
+10 Ervins Meznieks
+20 Gordon Gehan
+14 Aser Ghebremichael
+22 Matt DiLuccio
+UNIFORM_NUM FIRST_NAME LAST_NAME
+FIRST_NAME LAST_NAME NAME WINS
+Jaron Blossomgame Clemson 6
+Shelton Mitchell Clemson 6
+Avry Holmes Clemson 6
+Marcquise Reed Clemson 6
+Elijah Thomas Clemson 6
+Donte Grantham Clemson 6
+Gabe DeVoe Clemson 6
+Sidy Djitte Clemson 6
+Scott Spencer Clemson 6
+Legend Robertin Clemson 6
+Isaac Fields Clemson 6
+Ty Hudson Clemson 6
+Lyles Davis Clemson 6
+Riley McGillan Clemson 6
+Luke Kennard Duke 11
+Jayson Tatum Duke 11
+Grayson Allen Duke 11
+Frank Jackson Duke 11
+Amile Jefferson Duke 11
+Matt Jones Duke 11
+Harry Giles Duke 11
+Chase Jeter Duke 11
+Antonio Vrankovic Duke 11
+Jack White Duke 11
+Javin DeLaurier Duke 11
+Marques Bolden Duke 11
+Justin Robinson Duke 11
+Nick Pagliuca Duke 11
+Brennan Besser Duke 11
+Dwayne Bacon FloridaState 12
+Jonathan Isaac FloridaState 12
+Xavier Rathan-Mayes FloridaState 12
+Terance Mann FloridaState 12
+PJ Savoy FloridaState 12
+Michael Ojo FloridaState 12
+Trent Forrest FloridaState 12
+CJ Walker FloridaState 12
+Braian Angola FloridaState 12
+Jarquez Smith FloridaState 12
+Christ Koumadje FloridaState 12
+Brandon Allen FloridaState 12
+Phil Cofer FloridaState 12
+Josh Okogie GeorgiaTech 8
+Ben Lammers GeorgiaTech 8
+Tadric Jackson GeorgiaTech 8
+Quinton Stephens GeorgiaTech 8
+Josh Heath GeorgiaTech 8
+Justin Moore GeorgiaTech 8
+Christian Matthews GeorgiaTech 8
+Corey Heyward GeorgiaTech 8
+Sylvester Ogbonda GeorgiaTech 8
+Kellen McCormick GeorgiaTech 8
+Abdoulaye Gueye GeorgiaTech 8
+Shaheed Medlock GeorgiaTech 8
+Norman Harris GeorgiaTech 8
+Jodan Price GeorgiaTech 8
+Rand Rowland GeorgiaTech 8
+Donovan Mitchell Louisville 12
+Quentin Snider Louisville 12
+Deng Adel Louisville 12
+Jaylen Johnson Louisville 12
+Mangok Mathiang Louisville 12
+Ray Spalding Louisville 12
+Anas Mahmoud Louisville 12
+V.J. King Louisville 12
+Tony Hicks Louisville 12
+Ryan McMahon Louisville 12
+David Levitch Louisville 12
+Matz Stockman Louisville 12
+Jay Henderson Louisville 12
+Tyler Sharpe Louisville 12
+Davon Reed Miami 10
+Ja'Quan Newton Miami 10
+Bruce BrownJr. Miami 10
+Kamari Murphy Miami 10
+Anthony LawrenceII Miami 10
+Dejan Vasiljevic Miami 10
+Dewan Huell Miami 10
+Ebuka Izundu Miami 10
+Rodney MillerJr. Miami 10
+Mike Robinson Miami 10
+Chris Stowell Miami 10
+Justin Jackson NotreDame 12
+Joel BerryII NotreDame 12
+Kennedy Meeks NotreDame 12
+Isaiah Hicks NotreDame 12
+Tony Bradley NotreDame 12
+Kenny Williams NotreDame 12
+Theo Pinson NotreDame 12
+Luke Maye NotreDame 12
+Nate Britt NotreDame 12
+Brandon Robinson NotreDame 12
+Seventh Woods NotreDame 12
+Stilman White NotreDame 12
+Shea Rush NotreDame 12
+Kanler Coker NotreDame 12
+Aaron Rohlman NotreDame 12
+Mike Young Syracuse 10
+Jamel Artis Syracuse 10
+Cameron Johnson Syracuse 10
+Sheldon Jeter Syracuse 10
+Chris Jones Syracuse 10
+Ryan Luther Syracuse 10
+Jonathan Milligan Syracuse 10
+Rozelle Nix Syracuse 10
+Justice Kithcart Syracuse 10
+Ryan Seelye Syracuse 10
+Corey Manigault Syracuse 10
+Damon Wilson Syracuse 10
+Zach Smith Syracuse 10
+Andrew WhiteIII UNC 14
+Tyler Lydon UNC 14
+Tyus Battle UNC 14
+John Gillon UNC 14
+Taurean Thompson UNC 14
+DaJuan Coleman UNC 14
+Tyler Roberson UNC 14
+Frank Howard UNC 14
+Paschal Chukwu UNC 14
+Ray Featherston UNC 14
+Doyin Akintobi-Adeyeye UNC 14
+Adrian Autry UNC 14
+Ky Feldman UNC 14
+Shaun Belbey UNC 14
+Mike Sutton UNC 14
+Evan Dourdas UNC 14
+Jonathan Radner UNC 14
+London Perrantes Virginia 11
+Austin Nichols Virginia 11
+Marial Shayok Virginia 11
+Devon Hall Virginia 11
+Kyle Guy Virginia 11
+Isaiah Wilkins Virginia 11
+Darius Thompson Virginia 11
+Ty Jerome Virginia 11
+Jarred Reuter Virginia 11
+Mamadi Diakite Virginia 11
+Jack Salt Virginia 11
+Justice Bartley Virginia 11
+Jeff Jones Virginia 11
+Trevon GrossJr. Virginia 11
+Zach LeDay VirginiaTech 10
+Seth Allen VirginiaTech 10
+Chris Clarke VirginiaTech 10
+Ahmed Hill VirginiaTech 10
+Justin Robinson VirginiaTech 10
+Justin Bibbs VirginiaTech 10
+Ty Outlaw VirginiaTech 10
+Khadim Sy VirginiaTech 10
+Johnny Hamilton VirginiaTech 10
+Matt Galloway VirginiaTech 10
+Greg Donlon VirginiaTech 10
+John Collins WakeForest 9
+Bryant Crawford WakeForest 9
+Keyshawn Woods WakeForest 9
+Konstantinos Mitoglou WakeForest 9
+Austin Arians WakeForest 9
+Mitchell Wilbekin WakeForest 9
+Brandon Childress WakeForest 9
+Doral Moore WakeForest 9
+Greg McClinton WakeForest 9
+Donovan Mitchell WakeForest 9
+Sam Japhet-Mathias WakeForest 9
+Aaron Spivey WakeForest 9
+Troy Rike WakeForest 9
+Trent VanHorn WakeForest 9
+Rich Washington WakeForest 9
+Anthony Bilas WakeForest 9
+Britton Anderson WakeForest 9
+Amanda Bacon Duke Kunshan 70
+Miranda Baily Duke Kunshan 70
+Ellen Baily Duke Kunshan 70
+Meridith Grey Duke Kunshan 70
+Ellis Grey Duke Kunshan 70
+Derek Shepherd Duke Kunshan 70
+FIRST_NAME LAST_NAME NAME WINS
+Amanda Bacon Duke Kunshan 70
+Miranda Baily Duke Kunshan 70
+Ellen Baily Duke Kunshan 70
+Meridith Grey Duke Kunshan 70
+Ellis Grey Duke Kunshan 70
+Derek Shepherd Duke Kunshan 70
+FIRST_NAME LAST_NAME NAME WINS
+Amanda Bacon Duke Kunshan 70
+Miranda Baily Duke Kunshan 70
+Ellen Baily Duke Kunshan 70
+Meridith Grey Duke Kunshan 70
+Ellis Grey Duke Kunshan 70
+Derek Shepherd Duke Kunshan 70
+FIRST_NAME LAST_NAME NAME WINS
+Amanda Bacon Duke Kunshan 70
+Miranda Baily Duke Kunshan 70
+Ellen Baily Duke Kunshan 70
+Meridith Grey Duke Kunshan 70
+Ellis Grey Duke Kunshan 70
+Derek Shepherd Duke Kunshan 70

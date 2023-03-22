@@ -156,6 +156,8 @@ int main(int argc, char *argv[])
             // }
             if(p.hops == 0){ //the last one
                 p.trace[p.count] = (char)info[0]+'0';
+                // p.trace[p.count] = info[0];
+                // cout<<(char)info[0]+'0'<<endl;
                 status = send(socket_ringmaster, &p,sizeof(p),0) ;
                 if(status == -1 ){
                     cout <<"send error "<<errno<<endl;
@@ -168,6 +170,7 @@ int main(int argc, char *argv[])
             }
             else{
                 p.trace[p.count] = (char)info[0]+'0';
+                // p.trace[p.count] = info[0];
                 p.count++;
                 p.hops--;
                 int next = rand()%2;
